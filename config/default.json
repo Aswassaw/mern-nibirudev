@@ -1,0 +1,4 @@
+{
+  "author": "Andry Pebrianto",
+  "mongoURI": "mongodb+srv://aswassaw:aswassaw@cluster0.8ixwj.mongodb.net/dev-social-media?retryWrites=true&w=majority"
+}
