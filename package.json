@@ -1,0 +1,16 @@
+{
+  "name": "nibirudev",
+  "version": "1.0.0",
+  "description": "Aplikasi Sosial Media untuk para Developer",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "NodeJS",
+    "ExpressJS",
+    "JWT"
+  ],
+  "author": "Andry Pebrianto",
+  "license": "MIT"
+}
