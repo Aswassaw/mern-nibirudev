@@ -1,4 +1,5 @@
 {
   "author": "Andry Pebrianto",
-  "mongoURI": "mongodb+srv://aswassaw:aswassaw@cluster0.8ixwj.mongodb.net/dev-social-media?retryWrites=true&w=majority"
+  "mongoURI": "mongodb+srv://aswassaw:aswassaw@cluster0.8ixwj.mongodb.net/dev-social-media?retryWrites=true&w=majority",
+  "jwtSecret": "q9crtgi872gcndeu392gd3g27xdhx78deyb67iudg37n"
 }
