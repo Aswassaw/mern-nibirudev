@@ -5,8 +5,8 @@ const Profile = require("../models/Profile");
 const getCurrentProfileController = async (req, res) => {
   try {
     // Mengambil data profile sekaligus menghubungkan dengan data user (mirip join)
-    const profile = await Profile.findOne({ user: req.user.id }).populate(
-      "user",
+    const profile = await Profile.findOne({ userId: req.user.id }).populate(
+      "userId",
       ["name", "avatar"]
     );
 
@@ -17,7 +17,7 @@ const getCurrentProfileController = async (req, res) => {
 
     res.json(profile);
   } catch (err) {
-    console.log(err.message);
+    console.error(err.message);
     res.status(500).send("Server Error");
   }
 };
@@ -44,7 +44,7 @@ const postCurrentProfileController = async (req, res) => {
 
   // Build profile object
   const profileFields = {};
-  profileFields.user = req.user.id; // Id for ref
+  profileFields.userId = req.user.id; // Id for ref
   if (company) profileFields.company = company;
   if (website) profileFields.website = website;
   if (location) profileFields.location = location;
@@ -63,7 +63,7 @@ const postCurrentProfileController = async (req, res) => {
   if (linkedin) profileFields.social.linkedin = linkedin;
 
   try {
-    let profile = await Profile.findOne({ user: req.user.id });
+    let profile = await Profile.findOne({ userId: req.user.id });
 
     // Jika profile belum ada (create new profile)
     if (!profile) {
@@ -76,16 +76,56 @@ const postCurrentProfileController = async (req, res) => {
 
     // Jika profile sudah ada (update current profile)
     profile = await Profile.findOneAndUpdate(
-      { user: req.user.id }, // id data yang akan diupdate
+      { userId: req.user.id }, // id data yang akan diupdate
       { $set: profileFields }, // Data baru
       { new: true }
     );
 
     res.json(profile);
   } catch (err) {
-    console.log(err.message);
+    console.error(err.message);
     res.status(500).send("Server Error");
   }
 };
 
-module.exports = { getCurrentProfileController, postCurrentProfileController };
+// Controller untuk endpoint: GET api/profile
+const getAllProfileController = async (req, res) => {
+  try {
+    const profiles = await Profile.find().populate("userId", [
+      "name",
+      "avatar",
+    ]);
+
+    res.json(profiles);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+// Controller untuk endpoint: GET api/profile/user/:user_id
+const getProfileByUserId = async (req, res) => {
+  try {
+    const profile = await Profile.findOne({
+      userId: req.params.user_id,
+    }).populate("userId", ["name", "avatar"]);
+
+    // Jika profile tidak tersedia
+    if (!profile) return res.status(400).json({ msg: "Profile not found" });
+
+    res.json(profile);
+  } catch (err) {
+    console.error(err.message);
+    // Jika error karena ObjectId tidak valid
+    if (err.kind === "ObjectId")
+      return res.status(400).json({ msg: "Profile not found" });
+    res.status(500).send("Server Error");
+  }
+};
+
+module.exports = {
+  getCurrentProfileController,
+  postCurrentProfileController,
+  getAllProfileController,
+  getProfileByUserId,
+};

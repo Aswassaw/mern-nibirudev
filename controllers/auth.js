@@ -61,7 +61,7 @@ const registerController = async (req, res) => {
       }
     );
   } catch (err) {
-    console.log(err.message);
+    console.error(err.message);
     res.status(500).send("Server Error");
   }
 };
@@ -110,7 +110,7 @@ const loginController = async (req, res) => {
       }
     );
   } catch (err) {
-    console.log(err.message);
+    console.error(err.message);
     res.status(500).send("Server Error");
   }
 };
@@ -122,7 +122,7 @@ const getUserController = async (req, res) => {
 
     res.json(user);
   } catch (err) {
-    console.log(err.message);
+    console.error(err.message);
     res.status(500).send("Server Error");
   }
 };
