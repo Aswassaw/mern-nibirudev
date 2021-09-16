@@ -7,6 +7,9 @@ const app = express();
 // Connecting Database
 // connectDB();
 
+// Init Middleware
+app.use(express.json({ extended: false }));
+
 // Root endpoint
 app.get("/", (req, res) => res.send("Hello World"));
 
