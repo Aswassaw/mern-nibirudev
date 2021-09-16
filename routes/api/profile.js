@@ -6,6 +6,7 @@ const {
   postCurrentProfileController,
   getAllProfileController,
   getProfileByUserId,
+  deleteUserById,
 } = require("../../controllers/profile");
 
 const router = express.Router();
@@ -33,5 +34,10 @@ router.get("/", getAllProfileController);
 // @desc   | Endpoint untuk mendapatkan profile user berdasarkan id
 // @access | Public
 router.get("/user/:user_id", getProfileByUserId);
+
+// @route  | DELETE api/profile/user/:user_id
+// @desc   | Endpoint untuk menghapus profile, user, and post
+// @access | Private
+router.delete("/user/:user_id", authMiddleware, deleteUserById);
 
 module.exports = router;

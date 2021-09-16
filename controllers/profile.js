@@ -1,5 +1,6 @@
 const { validationResult } = require("express-validator");
 const Profile = require("../models/Profile");
+const User = require("../models/User");
 
 // Controller untuk endpoint: GET api/profile/me
 const getCurrentProfileController = async (req, res) => {
@@ -123,9 +124,27 @@ const getProfileByUserId = async (req, res) => {
   }
 };
 
+// Controller untuk endpoint: DELETE api/profile/user/:user_id
+const deleteUserById = async (req, res) => {
+  try {
+    // @todo - remove users posts
+
+    // Remove Profile
+    await Profile.findOneAndRemove({ userId: req.user.id });
+    // Remove User
+    await User.findOneAndRemove({ _id: req.user.id });
+
+    res.json({ msg: "User deleted" });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
 module.exports = {
   getCurrentProfileController,
   postCurrentProfileController,
   getAllProfileController,
   getProfileByUserId,
+  deleteUserById,
 };
