@@ -3,7 +3,7 @@ const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
-const UserModel = require("../models/User");
+const User = require("../models/User");
 
 const registerController = async (req, res) => {
   const errors = validationResult(req);
@@ -12,7 +12,7 @@ const registerController = async (req, res) => {
 
   try {
     const { name, email, password } = req.body;
-    const user = await UserModel.findOne({ email });
+    const user = await User.findOne({ email });
 
     // Check if user exist (agar email tidak duplikat)
     if (user)
@@ -25,8 +25,8 @@ const registerController = async (req, res) => {
       d: "mm",
     });
 
-    // Create new UserModel instance (data untuk dimasukkan ke db)
-    const newUser = new UserModel({
+    // Create new User instance (data untuk dimasukkan ke db)
+    const newUser = new User({
       name,
       email,
       avatar,
@@ -73,7 +73,7 @@ const loginController = async (req, res) => {
 
   try {
     const { email, password } = req.body;
-    const user = await UserModel.findOne({ email });
+    const user = await User.findOne({ email });
 
     // Check if user exist
     if (!user)
@@ -117,7 +117,7 @@ const loginController = async (req, res) => {
 
 const getUserController = async (req, res) => {
   try {
-    const user = await UserModel.findById(req.user.id).select("-password");
+    const user = await User.findById(req.user.id).select("-password");
 
     res.json(user);
   } catch (err) {

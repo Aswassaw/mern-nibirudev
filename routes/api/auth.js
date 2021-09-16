@@ -24,7 +24,7 @@ router.post("/login", loginValidation, loginController);
 
 // @route  | GET api/auth/register
 // @desc   | Endpoint untuk medapatkan data user
-// @access | Protected
+// @access | Private
 router.get("/", authMiddleware, getUserController);
 
 module.exports = router;
