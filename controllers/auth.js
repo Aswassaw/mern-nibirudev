@@ -5,9 +5,9 @@ const jwt = require("jsonwebtoken");
 const config = require("config");
 const User = require("../models/User");
 
+// Controller untuk endpoint: api/auth/register
 const registerController = async (req, res) => {
   const errors = validationResult(req);
-  // Jika terdapat error saat validasi
   if (!errors.isEmpty()) return res.status(400).json(errors);
 
   try {
@@ -66,9 +66,9 @@ const registerController = async (req, res) => {
   }
 };
 
+// Controller untuk endpoint: api/auth/login
 const loginController = async (req, res) => {
   const errors = validationResult(req);
-  // Jika terdapat error saat validasi
   if (!errors.isEmpty()) return res.status(400).json(errors);
 
   try {
@@ -115,6 +115,7 @@ const loginController = async (req, res) => {
   }
 };
 
+// Controller untuk endpoint: api/auth
 const getUserController = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");

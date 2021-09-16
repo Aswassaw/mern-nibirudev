@@ -1,6 +1,6 @@
 const { check } = require("express-validator");
 
-// Validasi untuk endpoint: api/auth/register
+// Validasi untuk endpoint: POST api/auth/register
 const registerValidation = [
   check("name", "Name is required").not().isEmpty(),
   check("email", "Please include a valid email").isEmail(),
@@ -9,7 +9,7 @@ const registerValidation = [
   }),
 ];
 
-// Validasi untuk endpoint: api/auth/login
+// Validasi untuk endpoint: POST api/auth/login
 const loginValidation = [
   check("email", "Please include a valid email").isEmail(),
   check("password", "Password is required").not().isEmpty(),
