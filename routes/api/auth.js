@@ -1,20 +1,30 @@
 const express = require("express");
 const authMiddleware = require("../../middleware/auth");
-const UserModel = require("../../models/User");
+const {
+  registerController,
+  getUserController,
+  loginController,
+} = require("../../controllers/auth");
+const {
+  registerValidation,
+  loginValidation,
+} = require("../../validation/auth");
+
 const router = express.Router();
 
-// @route  | GET api/auth
-// @desc   | Test route
-// @access | Protected
-router.get("/", authMiddleware, async (req, res) => {
-  try {
-    const user = await UserModel.findById(req.user.id).select("-password");
+// @route  | POST api/auth/register
+// @desc   | Endpoint untuk mendaftarkan user baru
+// @access | Public
+router.post("/register", registerValidation, registerController);
 
-    res.json(user);
-  } catch (err) {
-    console.log(err.message);
-    res.status(500).send("Server Error");
-  }
-});
+// @route  | POST api/auth/register
+// @desc   | Endpoint untuk login dan mendapatkan jwt token
+// @access | Public
+router.post("/login", loginValidation, loginController);
+
+// @route  | GET api/auth/register
+// @desc   | Endpoint untuk medapatkan data user
+// @access | Protected
+router.get("/", authMiddleware, getUserController);
 
 module.exports = router;
