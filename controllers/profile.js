@@ -3,7 +3,7 @@ const Profile = require("../models/Profile");
 const User = require("../models/User");
 
 // Controller untuk endpoint: GET api/profile/me
-const getCurrentProfileController = async (req, res) => {
+const getCurrentProfile = async (req, res) => {
   try {
     // Mengambil data profile sekaligus menghubungkan dengan data user (mirip join)
     const profile = await Profile.findOne({ userId: req.user.id }).populate(
@@ -24,7 +24,7 @@ const getCurrentProfileController = async (req, res) => {
 };
 
 // Controller untuk endpoint: POST api/profile
-const postCurrentProfileController = async (req, res) => {
+const postCurrentProfile = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json(errors);
 
@@ -90,7 +90,7 @@ const postCurrentProfileController = async (req, res) => {
 };
 
 // Controller untuk endpoint: GET api/profile
-const getAllProfileController = async (req, res) => {
+const getAllProfile = async (req, res) => {
   try {
     const profiles = await Profile.find().populate("userId", [
       "name",
@@ -141,10 +141,41 @@ const deleteUserById = async (req, res) => {
   }
 };
 
+// Controller untuk endpoint: PUT api/profile/experience
+const putProfileExperience = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return res.status(400).json(errors);
+
+  const { title, company, location, from, to, current, description } = req.body;
+
+  const newExp = {
+    title,
+    company,
+    location,
+    from,
+    to,
+    current,
+    description,
+  };
+
+  try {
+    const profile = await Profile.findOne({ userId: req.user.id });
+    // Unshift adalah kebalikan dari Push
+    profile.experience.unshift(newExp);
+    await profile.save();
+
+    res.json({ profile });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
 module.exports = {
-  getCurrentProfileController,
-  postCurrentProfileController,
-  getAllProfileController,
+  getCurrentProfile,
+  postCurrentProfile,
+  getAllProfile,
   getProfileByUserId,
   deleteUserById,
+  putProfileExperience,
 };
