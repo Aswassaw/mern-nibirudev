@@ -11,6 +11,7 @@ const {
   getProfileByUserId,
   deleteUserById,
   putProfileExperience,
+  deleteProfileExperience,
 } = require("../../controllers/profile");
 
 const router = express.Router();
@@ -52,5 +53,10 @@ router.put(
   [authMiddleware, putProfileExperienceValidation],
   putProfileExperience
 );
+
+// @route  | DELETE api/profile/experience/:exp_id
+// @desc   | Endpoint untuk menghapus profile experience berdasarkan id experience
+// @access | Private
+router.delete('/experience/:exp_id', authMiddleware, deleteProfileExperience)
 
 module.exports = router;

@@ -171,6 +171,26 @@ const putProfileExperience = async (req, res) => {
   }
 };
 
+// Controller untuk endpoint: DELETE api/profile/experience/exp_id
+const deleteProfileExperience = async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ userId: req.user.id });
+    // Get remove index
+    const removeIndex = profile.experience
+      .map((item) => item.id)
+      .indexOf(req.params.exp_id);
+
+    // Menghapus berdasarkan removeIndex dengan method splice
+    profile.experience.splice(removeIndex, 1);
+    profile.save();
+
+    res.json(profile);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
 module.exports = {
   getCurrentProfile,
   postCurrentProfile,
@@ -178,4 +198,5 @@ module.exports = {
   getProfileByUserId,
   deleteUserById,
   putProfileExperience,
+  deleteProfileExperience,
 };
