@@ -15,6 +15,7 @@ const {
   deleteProfileExperience,
   putProfileEducation,
   deleteProfileEducation,
+  getGithubRepo,
 } = require("../../controllers/profile");
 
 const router = express.Router();
@@ -75,5 +76,10 @@ router.put(
 // @desc   | Endpoint untuk menghapus profile education berdasarkan id education
 // @access | Private
 router.delete("/education/:edu_id", authMiddleware, deleteProfileEducation);
+
+// @route  | GET api/profile/github/:username
+// @desc   | Endpoint untuk mendapatkan repo user dari github
+// @access | Public
+router.get("/github/:username", getGithubRepo);
 
 module.exports = router;

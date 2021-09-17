@@ -1,5 +1,7 @@
 {
   "author": "Andry Pebrianto",
   "mongoURI": "mongodb+srv://aswassaw:aswassaw@cluster0.8ixwj.mongodb.net/dev-social-media?retryWrites=true&w=majority",
-  "jwtSecret": "q9crtgi872gcndeu392gd3g27xdhx78deyb67iudg37n"
+  "jwtSecret": "q9crtgi872gcndeu392gd3g27xdhx78deyb67iudg37n",
+  "githubClientId": "40378102574d76804ff1",
+  "githubSecret": "a027f9da183cb3088d3100257930a91a48e1a787"
 }
