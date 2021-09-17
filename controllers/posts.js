@@ -30,7 +30,7 @@ const postNewPost = async (req, res) => {
 // Controller untuk endpoint: GET api/posts
 const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find().sort({ date: -1 });
+    const posts = await Post.find().sort({ date: -1 }).populate();
 
     res.json(posts);
   } catch (err) {
@@ -42,7 +42,10 @@ const getAllPosts = async (req, res) => {
 // Controller untuk endpoint: GET api/posts/:post_id
 const getPostById = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.post_id);
+    const post = await Post.findById(req.params.post_id).populate("userId", [
+      "name",
+      "avatar",
+    ]);
 
     if (!post) {
       return res.status(404).json({ msg: "Post not found" });
@@ -58,7 +61,7 @@ const getPostById = async (req, res) => {
   }
 };
 
-// Controller untuk endpoint: GET api/posts/:post_id
+// Controller untuk endpoint: DELETE api/posts/:post_id
 const deletePostById = async (req, res) => {
   try {
     const post = await Post.findById(req.params.post_id);
@@ -84,4 +87,70 @@ const deletePostById = async (req, res) => {
   }
 };
 
-module.exports = { postNewPost, getAllPosts, getPostById, deletePostById };
+// Controller untuk endpoint: PUT api/posts/like/:post_id
+const putLikePost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.post_id);
+
+    if (!post) {
+      return res.status(404).json({ msg: "Post not found" });
+    }
+
+    // Check if post already been liked by current user
+    if (
+      post.likes.filter((like) => like.userId.toString() === req.user.id)
+        .length > 0
+    ) {
+      return res.status(400).json({ msg: "Post already liked" });
+    }
+
+    post.likes.unshift({ userId: req.user.id });
+    await post.save();
+
+    res.json(post.likes);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
+};
+
+// Controller untuk endpoint: PUT api/posts/unlike/:post_id
+const putUnlikePost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.post_id);
+
+    if (!post) {
+      return res.status(404).json({ msg: "Post not found" });
+    }
+
+    // Check if post already been liked by current user
+    if (
+      post.likes.filter((like) => like.userId.toString() === req.user.id)
+        .length === 0
+    ) {
+      return res.status(400).json({ msg: "Post has not yet been liked" });
+    }
+
+    // Get remove index
+    const removeIndex = post.likes
+      .map((like) => like.userId.toString())
+      .indexOf(req.user.post_id);
+    post.likes.splice(removeIndex, 1);
+
+    await post.save();
+
+    res.json(post.likes);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
+};
+
+module.exports = {
+  postNewPost,
+  getAllPosts,
+  getPostById,
+  deletePostById,
+  putLikePost,
+  putUnlikePost,
+};
