@@ -1,11 +1,13 @@
 const express = require("express");
+const authMiddleware = require("../../middleware/auth");
+const { postNewPost } = require("../../controllers/posts");
+const { postNewPostValidation } = require("../../validation/posts");
+
 const router = express.Router();
 
-// @route  | GET api/posts
-// @desc   | Test route
-// @access | Public
-router.get("/", (req, res) => {
-  res.send("Posts router");
-});
+// @route  | POST api/posts
+// @desc   | Create new post
+// @access | Provate
+router.post("/", [authMiddleware, postNewPostValidation], postNewPost);
 
 module.exports = router;
