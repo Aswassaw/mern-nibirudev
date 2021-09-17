@@ -3,6 +3,7 @@ const authMiddleware = require("../../middleware/auth");
 const {
   postCurrentProfileValidation,
   putProfileExperienceValidation,
+  putProfileEducationValidation,
 } = require("../../validation/profile");
 const {
   getCurrentProfile,
@@ -12,6 +13,8 @@ const {
   deleteUserById,
   putProfileExperience,
   deleteProfileExperience,
+  putProfileEducation,
+  deleteProfileEducation,
 } = require("../../controllers/profile");
 
 const router = express.Router();
@@ -57,6 +60,20 @@ router.put(
 // @route  | DELETE api/profile/experience/:exp_id
 // @desc   | Endpoint untuk menghapus profile experience berdasarkan id experience
 // @access | Private
-router.delete('/experience/:exp_id', authMiddleware, deleteProfileExperience)
+router.delete("/experience/:exp_id", authMiddleware, deleteProfileExperience);
+
+// @route  | PUT api/profile/education
+// @desc   | Endpoint untuk menambah profile education
+// @access | Private
+router.put(
+  "/education",
+  [authMiddleware, putProfileEducationValidation],
+  putProfileEducation
+);
+
+// @route  | DELETE api/profile/education/:edu_id
+// @desc   | Endpoint untuk menghapus profile education berdasarkan id education
+// @access | Private
+router.delete("/education/:edu_id", authMiddleware, deleteProfileEducation);
 
 module.exports = router;

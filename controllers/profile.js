@@ -180,8 +180,65 @@ const deleteProfileExperience = async (req, res) => {
       .map((item) => item.id)
       .indexOf(req.params.exp_id);
 
+    if (removeIndex === -1)
+      return res.status(404).json({ msg: "Experience not found" });
+
     // Menghapus berdasarkan removeIndex dengan method splice
     profile.experience.splice(removeIndex, 1);
+    profile.save();
+
+    res.json(profile);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+// Controller untuk endpoint: PUT api/profile/education
+const putProfileEducation = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return res.status(400).json(errors);
+
+  const { school, degree, fieldOfStudy, from, to, current, description } =
+    req.body;
+
+  const newEdu = {
+    school,
+    degree,
+    fieldOfStudy,
+    from,
+    to,
+    current,
+    description,
+  };
+
+  try {
+    const profile = await Profile.findOne({ userId: req.user.id });
+    // Unshift adalah kebalikan dari Push
+    profile.education.unshift(newEdu);
+    await profile.save();
+
+    res.json({ profile });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+// Controller untuk endpoint: DELETE api/profile/education/edu_id
+const deleteProfileEducation = async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ userId: req.user.id });
+    // Get remove index
+    const removeIndex = profile.education
+      .map((item) => item.id)
+      .indexOf(req.params.edu_id);
+
+    if (removeIndex === -1)
+      return res.status(404).json({ msg: "Education not found" });
+
+    // Menghapus berdasarkan removeIndex dengan method splice
+    profile.education.splice(removeIndex, 1);
     profile.save();
 
     res.json(profile);
@@ -199,4 +256,6 @@ module.exports = {
   deleteUserById,
   putProfileExperience,
   deleteProfileExperience,
+  putProfileEducation,
+  deleteProfileEducation,
 };
