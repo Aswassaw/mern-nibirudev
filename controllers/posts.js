@@ -134,7 +134,7 @@ const putUnlikePost = async (req, res) => {
     // Get remove index
     const removeIndex = post.likes
       .map((like) => like.userId.toString())
-      .indexOf(req.user.post_id);
+      .indexOf(req.user.id);
     post.likes.splice(removeIndex, 1);
 
     await post.save();
@@ -146,6 +146,61 @@ const putUnlikePost = async (req, res) => {
   }
 };
 
+// Controller untuk endpoint: PUT api/posts/comment/:post_id
+const putCommentPost = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    const post = await Post.findById(req.params.post_id);
+
+    const newComment = {
+      text: req.body.text,
+      name: user.name,
+      avatar: user.avatar,
+      userId: req.user.id,
+    };
+
+    post.comments.unshift(newComment);
+    await post.save();
+
+    res.json(post);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+// Controller untuk endpoint: DELETE api/posts/comment/:post_id/:comment_id
+const deleteCommentPost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.post_id);
+
+    // Pull out comment
+    const comment = post.comments.find(
+      (comment) => comment.id === req.params.comment_id
+    );
+
+    // If comment doesn't exist
+    if (!comment) return res.status(404).json({ msg: "Comment not found" });
+
+    // Check user
+    if (comment.userId.toString() !== req.user.id)
+      return res.status(401).json({ msg: "User not authorized" });
+
+    // Get remove index
+    const removeIndex = post.comments
+      .map((comment) => comment.id)
+      .indexOf(req.params.comment_id);
+    post.comments.splice(removeIndex, 1);
+
+    await post.save();
+
+    res.json(post.comments);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
 module.exports = {
   postNewPost,
   getAllPosts,
@@ -153,4 +208,6 @@ module.exports = {
   deletePostById,
   putLikePost,
   putUnlikePost,
+  putCommentPost,
+  deleteCommentPost,
 };
