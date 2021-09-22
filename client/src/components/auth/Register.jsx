@@ -16,19 +16,19 @@ const Register = () => {
       [e.target.name]: e.target.value,
     }));
 
-  const onSubmitHandler = (e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
 
     if (password !== password2) {
       console.log("Password tidak cocok");
     } else {
-      console.log(formData);
+      console.log("Success");
     }
   };
 
   return (
     <Fragment>
-      <h1 className="large text-primary">Sign Up</h1>
+      <h1 className="large text-primary">Register</h1>
       <p className="lead">
         <i className="fas fa-user"></i> Create Your Account
       </p>
