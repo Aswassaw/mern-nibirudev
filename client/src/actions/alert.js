@@ -15,14 +15,5 @@ export const setAlert =
         type: REMOVE_ALERT,
         payload: id,
       });
-    }, 5000);
-  };
-
-export const removeAlert =
-  ( id ) =>
-  (dispatch) => {
-    dispatch({
-      type: REMOVE_ALERT,
-      payload: id,
-    });
+    }, 10000);
   };

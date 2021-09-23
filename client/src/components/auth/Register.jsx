@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { removeAlert, setAlert } from "../../actions/alert";
+import { setAlert } from "../../actions/alert";
+import { register } from "../../actions/auth";
 import Alert from "../layout/Alert";
 
 const Register = () => {
@@ -26,12 +27,6 @@ const Register = () => {
     e.preventDefault();
 
     if (password !== password2) {
-      alerts.forEach((alert) => {
-        if (alert.name === "password") {
-          dispatch(removeAlert(alert.id));
-        }
-      });
-
       dispatch(
         setAlert({
           msg: "Passwords do not match",
@@ -40,7 +35,7 @@ const Register = () => {
         })
       );
     } else {
-      console.log("Success");
+      dispatch(register({ name, email, password }));
     }
   };
 
@@ -50,7 +45,11 @@ const Register = () => {
       <p className="lead">
         <i className="fas fa-user"></i> Create Your Account
       </p>
-      <Alert alerts={alerts} />
+      {alerts !== null &&
+        alerts.length > 0 &&
+        alerts.map((alert) => (
+          <Alert key={alert.id} alert={alert} timeout={10} />
+        ))}
       <form className="form" onSubmit={onSubmitHandler}>
         <div className="form-group">
           <input
