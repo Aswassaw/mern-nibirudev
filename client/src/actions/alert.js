@@ -1,12 +1,28 @@
+import { nanoid } from "nanoid";
 import { SET_ALERT, REMOVE_ALERT } from "./types";
-import uuid from "uuid";
 
-const setAlert = (msg, type) => (dispatch) => {
-  const id = uuid.v4();
-  dispatch({
-    type: SET_ALERT,
-    payload: { msg, type, id },
-  });
-};
+export const setAlert =
+  ({ msg, type, name }) =>
+  (dispatch) => {
+    const id = nanoid(16);
+    dispatch({
+      type: SET_ALERT,
+      payload: { msg, type, name, id },
+    });
 
-export { setAlert };
+    setTimeout(() => {
+      dispatch({
+        type: REMOVE_ALERT,
+        payload: id,
+      });
+    }, 5000);
+  };
+
+export const removeAlert =
+  ( id ) =>
+  (dispatch) => {
+    dispatch({
+      type: REMOVE_ALERT,
+      payload: id,
+    });
+  };

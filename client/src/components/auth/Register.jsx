@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { removeAlert, setAlert } from "../../actions/alert";
+import Alert from "../layout/Alert";
 
 const Register = () => {
+  const alerts = useSelector((state) => state.alert);
+  const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -20,7 +26,19 @@ const Register = () => {
     e.preventDefault();
 
     if (password !== password2) {
-      console.log("Password tidak cocok");
+      alerts.forEach((alert) => {
+        if (alert.name === "password") {
+          dispatch(removeAlert(alert.id));
+        }
+      });
+
+      dispatch(
+        setAlert({
+          msg: "Passwords do not match",
+          type: "danger",
+          name: "password",
+        })
+      );
     } else {
       console.log("Success");
     }
@@ -32,6 +50,7 @@ const Register = () => {
       <p className="lead">
         <i className="fas fa-user"></i> Create Your Account
       </p>
+      <Alert alerts={alerts} />
       <form className="form" onSubmit={onSubmitHandler}>
         <div className="form-group">
           <input
