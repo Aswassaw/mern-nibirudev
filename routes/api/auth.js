@@ -12,19 +12,19 @@ const {
 
 const router = express.Router();
 
+// @route  | GET api/auth
+// @desc   | Endpoint untuk mendapatkan data user
+// @access | Private
+router.get("/", authMiddleware, getUserController);
+
 // @route  | POST api/auth/register
 // @desc   | Endpoint untuk mendaftarkan user baru
 // @access | Public
 router.post("/register", registerValidation, registerController);
 
-// @route  | POST api/auth/register
+// @route  | POST api/auth/login
 // @desc   | Endpoint untuk login dan mendapatkan jwt token
 // @access | Public
 router.post("/login", loginValidation, loginController);
-
-// @route  | GET api/auth/register
-// @desc   | Endpoint untuk medapatkan data user
-// @access | Private
-router.get("/", authMiddleware, getUserController);
 
 module.exports = router;
