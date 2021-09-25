@@ -6,6 +6,7 @@ import {
   LOGIN_FAIL,
   AUTH_SUCCESS,
   AUTH_FAIL,
+  LOGOUT,
 } from "./types";
 import { setAlert } from "./alert";
 import setAuthToken from "../utils/setAuthToken";
@@ -117,3 +118,11 @@ export const login =
       }
     }
   };
+
+// Logout / Clear Profile
+export const logout = () => (dispatch) => {
+  console.log("Bangsat");
+  dispatch({
+    type: LOGOUT,
+  });
+};
