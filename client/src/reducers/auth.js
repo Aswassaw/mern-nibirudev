@@ -1,4 +1,4 @@
-import { REGISTER_FAIL, REGISTER_SUCCESS, AUTH_ERROR, AUTH_SUCCESS } from "../actions/types";
+import { REGISTER_FAIL, REGISTER_SUCCESS, LOGIN_SUCCESS, LOGIN_FAIL, AUTH_FAIL, AUTH_SUCCESS } from "../actions/types";
 
 const initialState = {
   token: localStorage.getItem("token"),
@@ -27,6 +27,22 @@ const authReducer = (state = initialState, action) => {
         isAuthenticated: false,
         loading: false,
       };
+    case LOGIN_SUCCESS:
+      localStorage.setItem("token", payload.token);
+      return {
+        ...state,
+        token: payload.token,
+        isAuthenticated: true,
+        loading: false,
+      };
+    case LOGIN_FAIL:
+      localStorage.removeItem("token");
+      return {
+        ...state,
+        token: null,
+        isAuthenticated: false,
+        loading: false,
+      };
     case AUTH_SUCCESS:
       return {
         ...state,
@@ -34,7 +50,7 @@ const authReducer = (state = initialState, action) => {
         loading: false,
         user: payload,
       }
-    case AUTH_ERROR:
+    case AUTH_FAIL:
       localStorage.removeItem("token");
       return {
         ...state,

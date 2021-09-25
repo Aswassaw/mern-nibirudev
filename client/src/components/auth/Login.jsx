@@ -1,12 +1,24 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { login } from "../../actions/auth";
+import Alert from "../layout/Alert";
 
 const Login = () => {
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  const alerts = useSelector((state) => state.alert);
+  const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const { email, password } = formData;
+
+  // Redirect if logged in
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />
+  }
 
   const onChangeHandler = (e) =>
     setFormData((c) => ({
@@ -16,7 +28,8 @@ const Login = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    console.log("Success");
+
+    dispatch(login({ email, password }));
   };
 
   return (
@@ -25,6 +38,11 @@ const Login = () => {
       <p className="lead">
         <i className="fas fa-user"></i> Sign into Your Account
       </p>
+      {alerts !== null &&
+        alerts.length > 0 &&
+        alerts.map((alert) => (
+          <Alert key={alert.id} alert={alert} timeout={10} />
+        ))}
       <form className="form" onSubmit={onSubmitHandler}>
         <div className="form-group">
           <input

@@ -13,7 +13,6 @@ import { authUser } from "./actions/auth";
 
 if (localStorage.getItem("token")) {
   setAuthToken(localStorage.getItem("token"));
-  console.log("Di atas App");
 }
 
 const App = () => {
