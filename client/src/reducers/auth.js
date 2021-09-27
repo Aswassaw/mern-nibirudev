@@ -20,10 +20,10 @@ const authReducer = (state = initialState, action) => {
 
   switch (type) {
     case REGISTER_SUCCESS:
-      localStorage.setItem("token", payload.token);
+      localStorage.setItem("token", payload);
       return {
         ...state,
-        token: payload.token,
+        token: payload,
         isAuthenticated: true,
         loading: false,
       };
@@ -33,13 +33,14 @@ const authReducer = (state = initialState, action) => {
         ...state,
         token: null,
         isAuthenticated: false,
+        user: null,
         loading: false,
       };
     case LOGIN_SUCCESS:
-      localStorage.setItem("token", payload.token);
+      localStorage.setItem("token", payload);
       return {
         ...state,
-        token: payload.token,
+        token: payload,
         isAuthenticated: true,
         loading: false,
       };
@@ -49,14 +50,15 @@ const authReducer = (state = initialState, action) => {
         ...state,
         token: null,
         isAuthenticated: false,
+        user: null,
         loading: false,
       };
     case AUTH_SUCCESS:
       return {
         ...state,
         isAuthenticated: true,
-        loading: false,
         user: payload,
+        loading: false,
       };
     case AUTH_FAIL:
       localStorage.removeItem("token");
@@ -64,6 +66,7 @@ const authReducer = (state = initialState, action) => {
         ...state,
         token: null,
         isAuthenticated: false,
+        user: null,
         loading: false,
       };
     case LOGOUT:
@@ -72,6 +75,7 @@ const authReducer = (state = initialState, action) => {
         ...state,
         token: null,
         isAuthenticated: false,
+        user: null,
         loading: false,
       };
     default:

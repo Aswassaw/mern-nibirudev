@@ -1,5 +1,6 @@
 const fs = require("fs");
 const express = require("express");
+const cors = require("cors");
 const morgan = require("morgan");
 const chalk = require("chalk");
 const connectToDB = require("./api/v1/config/db");
@@ -11,6 +12,7 @@ const app = express();
 connectToDB();
 
 // Menjalankan middleware yang dibutuhkan
+app.use(cors());
 app.use(express.json({ extended: false }));
 app.use(morgan("dev"));
 
@@ -19,7 +21,7 @@ app.get("/", (req, res, next) => {
   fs.readFile("./api/v1/html/index.html", (err, data) => {
     // Jika file tidak ditemukan
     if (err) {
-      res.write("<title>NibiruDev Backend API</title>")
+      res.write("<title>NibiruDev Backend API</title>");
       res.write("<h1>NibiruDev Backend API</h1>");
       res.write(`<p>Read API Documentation: <a href="#">Doc</a></p>`);
       res.end();

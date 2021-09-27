@@ -77,7 +77,7 @@ const register = async (req, res) => {
         if (err) throw err;
 
         // Mengembalikan jwt token
-        res.json({ msg: "You have successfully registered", token });
+        res.json({ token });
       }
     );
   } catch (err) {
@@ -123,7 +123,7 @@ const login = async (req, res) => {
         if (err) throw err;
 
         // Mengembalikan jwt token
-        res.json({ msg: "You have successfully logged in", token });
+        res.json({ token });
       }
     );
   } catch (err) {

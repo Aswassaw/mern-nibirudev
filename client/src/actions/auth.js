@@ -8,6 +8,7 @@ import {
   AUTH_FAIL,
   LOGOUT,
 } from "./types";
+import { API_URL } from "../utils/constant";
 import { setAlert } from "./alert";
 import setAuthToken from "../utils/setAuthToken";
 
@@ -18,7 +19,7 @@ export const authUser = () => async (dispatch) => {
   }
 
   try {
-    const res = await axios.get("/api/auth");
+    const res = await axios.get(API_URL + "/v1/user/me");
 
     dispatch({
       type: AUTH_SUCCESS,
@@ -45,20 +46,18 @@ export const register =
     const body = JSON.stringify({ name, email, password });
 
     try {
-      const res = await axios.post("/api/auth/register", body, config);
+      const res = await axios.post(API_URL + "/v1/auth/register", body, config);
 
       dispatch({
         type: REGISTER_SUCCESS,
-        payload: res.data,
+        payload: res.data.token,
       });
-
       dispatch(authUser());
     } catch (err) {
       console.error(err.message);
 
       dispatch({
         type: REGISTER_FAIL,
-        payload: err.message,
       });
 
       const errors = err.response.data.errors;
@@ -69,6 +68,7 @@ export const register =
               msg,
               type: "danger",
               name: param,
+              timeout: 10,
             })
           );
         });
@@ -88,20 +88,18 @@ export const login =
     const body = JSON.stringify({ email, password });
 
     try {
-      const res = await axios.post("/api/auth/login", body, config);
+      const res = await axios.post(API_URL + "/v1/auth/login", body, config);
 
       dispatch({
         type: LOGIN_SUCCESS,
-        payload: res.data,
+        payload: res.data.token,
       });
-
       dispatch(authUser());
     } catch (err) {
       console.error(err.message);
 
       dispatch({
         type: LOGIN_FAIL,
-        payload: err.message,
       });
 
       const errors = err.response.data.errors;
@@ -112,6 +110,7 @@ export const login =
               msg,
               type: "danger",
               name: param,
+              timeout: 10,
             })
           );
         });
@@ -121,7 +120,6 @@ export const login =
 
 // Logout / Clear Profile
 export const logout = () => (dispatch) => {
-  console.log("Bangsat");
   dispatch({
     type: LOGOUT,
   });

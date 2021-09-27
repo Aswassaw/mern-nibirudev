@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-const Alert = ({ alert, timeout }) => {
-  const [timeOut, setTimeOut] = useState(timeout);
+const Alert = ({ alert }) => {
+  const [timeOut, setTimeOut] = useState(alert.timeout);
 
   useEffect(() => {
     const timeOutInterval = setInterval(() => {
@@ -24,7 +24,6 @@ const Alert = ({ alert, timeout }) => {
 
 Alert.propTypes = {
   alert: PropTypes.object.isRequired,
-  timeout: PropTypes.number.isRequired,
 };
 
 export default Alert;

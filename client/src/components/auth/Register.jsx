@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setAlert } from "../../actions/alert";
@@ -17,6 +17,10 @@ const Register = () => {
     password2: "",
   });
   const { name, email, password, password2 } = formData;
+
+  useEffect(() => {
+    document.title = "NibiruDev - Register";
+  }, []);
 
   // Redirect if logged in
   if (isAuthenticated) {
@@ -38,6 +42,7 @@ const Register = () => {
           msg: "Passwords do not match",
           type: "danger",
           name: "password",
+          timeout: 10,
         })
       );
     } else {
@@ -54,7 +59,7 @@ const Register = () => {
       {alerts !== null &&
         alerts.length > 0 &&
         alerts.map((alert) => (
-          <Alert key={alert.id} alert={alert} timeout={10} />
+          <Alert key={alert.id} alert={alert} />
         ))}
       <form className="form" onSubmit={onSubmitHandler}>
         <div className="form-group">
@@ -106,7 +111,7 @@ const Register = () => {
         <input type="submit" value="Register" className="btn btn-primary" />
       </form>
       <p className="my-1">
-        Already have an account? <Link to="login">Login</Link>
+        Already have an account? <Link to="/login">Login</Link>
       </p>
     </div>
   );
