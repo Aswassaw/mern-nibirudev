@@ -1,3 +1,4 @@
+const fs = require("fs");
 const express = require("express");
 const morgan = require("morgan");
 const chalk = require("chalk");
@@ -14,9 +15,20 @@ app.use(express.json({ extended: false }));
 app.use(morgan("dev"));
 
 // Root endpoint
-app.get("/", (req, res) =>
-  res.send("Selamat Datang di Backend dari NibiruDev")
-);
+app.get("/", (req, res, next) => {
+  fs.readFile("./api/v1/html/index.html", (err, data) => {
+    // Jika file tidak ditemukan
+    if (err) {
+      res.write("<title>NibiruDev Backend API</title>")
+      res.write("<h1>NibiruDev Backend API</h1>");
+      res.write(`<p>Read API Documentation: <a href="#">Doc</a></p>`);
+      res.end();
+    } else {
+      res.write(data);
+      res.end();
+    }
+  });
+});
 
 // Mendefinisikan Routes (Versi 1)
 app.use("/v1/auth", require("./api/v1/routes/auth"));
