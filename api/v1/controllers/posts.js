@@ -1,9 +1,8 @@
 const { validationResult } = require("express-validator");
 const User = require("../models/User");
-const Profile = require("../models/Profile");
 const Post = require("../models/Post");
 
-// Controller untuk endpoint: POST api/posts
+// Controller: v1/posts
 const postNewPost = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json(errors);
@@ -12,40 +11,56 @@ const postNewPost = async (req, res) => {
     const user = await User.findById(req.user.id).select("-password");
 
     const newPost = new Post({
+      user: req.user.id,
       text: req.body.text,
-      name: user.name,
-      avatar: user.avatar,
-      userId: req.user.id,
     });
     // Saving to db
     await newPost.save();
 
-    res.json(newPost);
+    res.json({ msg: "Post uploaded" });
   } catch (err) {
-    console.error(err.message);
+    console.error(err);
     res.status(500).send("Server Error");
   }
 };
 
-// Controller untuk endpoint: GET api/posts
+// Controller: v1/posts
 const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find().sort({ date: -1 }).populate();
+    const posts = await Post.find()
+      .sort({ date: -1 })
+      .populate("user", ["name", "avatar"]);
+
+    // Populate likes dan comments
+    for (let i = 0; i < posts.length; i++) {
+      for (let j = 0; j < posts[i].comments.length; j++) {
+        await posts[i].populate(`comments.${i}.user`, ["name", "avatar"]);
+      }
+      for (let j = 0; j < posts[i].likes.length; j++) {
+        await posts[i].populate(`likes.${i}.user`, ["name", "avatar"]);
+      }
+    }
 
     res.json(posts);
   } catch (err) {
-    console.error(err.message);
+    console.error(err);
     res.status(500).send("Server Error");
   }
 };
 
-// Controller untuk endpoint: GET api/posts/:post_id
+// Controller: v1/posts/:post_id
 const getPostById = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.post_id).populate("userId", [
+    const post = await Post.findById(req.params.post_id).populate("user", [
       "name",
       "avatar",
     ]);
+    for (let i = 0; i < post.comments.length; i++) {
+      await post.populate(`comments.${i}.user`, ["name", "avatar"]);
+    }
+    for (let i = 0; i < post.likes.length; i++) {
+      await post.populate(`likes.${i}.user`, ["name", "avatar"]);
+    }
 
     if (!post) {
       return res.status(404).json({ msg: "Post not found" });
@@ -53,7 +68,7 @@ const getPostById = async (req, res) => {
 
     res.json(post);
   } catch (err) {
-    console.error(err.message);
+    console.error(err);
     if (err.kind === "ObjectId") {
       return res.status(404).json({ msg: "Post not found" });
     }
@@ -61,7 +76,7 @@ const getPostById = async (req, res) => {
   }
 };
 
-// Controller untuk endpoint: DELETE api/posts/:post_id
+// Controller: v1/posts/:post_id
 const deletePostById = async (req, res) => {
   try {
     const post = await Post.findById(req.params.post_id);
@@ -71,15 +86,15 @@ const deletePostById = async (req, res) => {
     }
 
     // Check user
-    if (post.userId.toString() !== req.user.id) {
-      return res.status(401).json({ msg: "User not Authorized" });
+    if (post.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "You're not Authorized" });
     }
 
     await post.remove();
 
     res.json({ msg: "Post removed" });
   } catch (err) {
-    console.error(err.message);
+    console.error(err);
     if (err.kind === "ObjectId") {
       return res.status(404).json({ msg: "Post not found" });
     }
@@ -87,45 +102,46 @@ const deletePostById = async (req, res) => {
   }
 };
 
-// Controller untuk endpoint: PUT api/posts/like/:post_id
-const putLikePost = async (req, res) => {
+// Controller: v1/posts/:post_id/like
+const postLikePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.post_id);
-
     if (!post) {
       return res.status(404).json({ msg: "Post not found" });
     }
 
     // Check if post already been liked by current user
     if (
-      post.likes.filter((like) => like.userId.toString() === req.user.id)
-        .length > 0
+      post.likes.filter((like) => like.user.toString() === req.user.id).length >
+      0
     ) {
       return res.status(400).json({ msg: "Post already liked" });
     }
 
-    post.likes.unshift({ userId: req.user.id });
+    post.likes.unshift({ user: req.user.id });
     await post.save();
 
-    res.json(post.likes);
+    res.json({ msg: "Post liked" });
   } catch (err) {
     console.error(err);
+    if (err.kind === "ObjectId") {
+      return res.status(404).json({ msg: "Post not found" });
+    }
     res.status(500).send("Server Error");
   }
 };
 
-// Controller untuk endpoint: PUT api/posts/unlike/:post_id
-const putUnlikePost = async (req, res) => {
+// Controller: v1/posts/:post_id/like
+const deleteLikePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.post_id);
-
     if (!post) {
       return res.status(404).json({ msg: "Post not found" });
     }
 
     // Check if post already been liked by current user
     if (
-      post.likes.filter((like) => like.userId.toString() === req.user.id)
+      post.likes.filter((like) => like.user.toString() === req.user.id)
         .length === 0
     ) {
       return res.status(400).json({ msg: "Post has not yet been liked" });
@@ -133,46 +149,58 @@ const putUnlikePost = async (req, res) => {
 
     // Get remove index
     const removeIndex = post.likes
-      .map((like) => like.userId.toString())
+      .map((like) => like.user.toString())
       .indexOf(req.user.id);
     post.likes.splice(removeIndex, 1);
 
     await post.save();
 
-    res.json(post.likes);
+    res.json({ msg: "Post unliked" });
   } catch (err) {
     console.error(err);
+    if (err.kind === "ObjectId") {
+      return res.status(404).json({ msg: "Post not found" });
+    }
     res.status(500).send("Server Error");
   }
 };
 
-// Controller untuk endpoint: PUT api/posts/comment/:post_id
-const putCommentPost = async (req, res) => {
+// Controller: v1/posts/:post_id/comment
+const postCommentPost = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return res.status(400).json(errors);
+
   try {
-    const user = await User.findById(req.user.id).select("-password");
     const post = await Post.findById(req.params.post_id);
+    if (!post) {
+      return res.status(404).json({ msg: "Post not found" });
+    }
 
     const newComment = {
       text: req.body.text,
-      name: user.name,
-      avatar: user.avatar,
-      userId: req.user.id,
+      user: req.user.id,
     };
 
     post.comments.unshift(newComment);
     await post.save();
 
-    res.json(post);
+    res.json({ msg: "Comment uploaded" });
   } catch (err) {
-    console.error(err.message);
+    console.error(err);
+    if (err.kind === "ObjectId") {
+      return res.status(404).json({ msg: "Post not found" });
+    }
     res.status(500).send("Server Error");
   }
 };
 
-// Controller untuk endpoint: DELETE api/posts/comment/:post_id/:comment_id
+// Controller: v1/posts/:post_id/comment/:comment_id
 const deleteCommentPost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.post_id);
+    if (!post) {
+      return res.status(404).json({ msg: "Post not found" });
+    }
 
     // Pull out comment
     const comment = post.comments.find(
@@ -183,8 +211,8 @@ const deleteCommentPost = async (req, res) => {
     if (!comment) return res.status(404).json({ msg: "Comment not found" });
 
     // Check user
-    if (comment.userId.toString() !== req.user.id)
-      return res.status(401).json({ msg: "User not authorized" });
+    if (comment.user.toString() !== req.user.id)
+      return res.status(401).json({ msg: "You're not Authorized" });
 
     // Get remove index
     const removeIndex = post.comments
@@ -194,9 +222,12 @@ const deleteCommentPost = async (req, res) => {
 
     await post.save();
 
-    res.json(post.comments);
+    res.json({ msg: "Comment deleted" });
   } catch (err) {
-    console.error(err.message);
+    console.error(err);
+    if (err.kind === "ObjectId") {
+      return res.status(404).json({ msg: "Post not found" });
+    }
     res.status(500).send("Server Error");
   }
 };
@@ -206,8 +237,8 @@ module.exports = {
   getAllPosts,
   getPostById,
   deletePostById,
-  putLikePost,
-  putUnlikePost,
-  putCommentPost,
+  postLikePost,
+  deleteLikePost,
+  postCommentPost,
   deleteCommentPost,
 };

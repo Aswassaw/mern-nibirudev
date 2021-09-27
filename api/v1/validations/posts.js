@@ -1,16 +1,16 @@
 const { check } = require("express-validator");
 
-// Validasi untuk endpoint: POST api/posts
+// Validasi: v1/posts
 const postNewPostValidation = [
   check("text", "Text is required").not().isEmpty(),
 ];
 
-// Validasi untuk endpoint: PUT api/posts/comment/:post_id/:comment_id
-const putCommentPostValidation = [
+// Validasi: v1/posts/:post_id/comment
+const postCommentPostValidation = [
   check("text", "Text is required").not().isEmpty(),
 ];
 
 module.exports = {
   postNewPostValidation,
-  putCommentPostValidation,
+  postCommentPostValidation,
 };

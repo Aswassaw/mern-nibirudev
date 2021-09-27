@@ -1,26 +1,32 @@
 const express = require("express");
-const connectDB = require("./config/db");
-const config = require("config");
+const morgan = require("morgan");
+const chalk = require("chalk");
+const connectToDB = require("./api/v1/config/db");
+const { AUTHOR, PORT, URI } = require("./api/v1/config/default");
 
 const app = express();
 
-// Connecting Database
-connectDB();
+// Menghubungkan ke database MongoDB
+connectToDB();
 
-// Init Middleware
+// Menjalankan middleware yang dibutuhkan
 app.use(express.json({ extended: false }));
+app.use(morgan("dev"));
 
 // Root endpoint
-app.get("/", (req, res) => res.send("Hello World"));
+app.get("/", (req, res) =>
+  res.send("Selamat Datang di Backend dari NibiruDev")
+);
 
-// Define Routes
-app.use("/api/auth", require("./routes/api/auth"));
-app.use("/api/profile", require("./routes/api/profile"));
-app.use("/api/posts", require("./routes/api/posts"));
+// Mendefinisikan Routes (Versi 1)
+app.use("/v1/auth", require("./api/v1/routes/auth"));
+app.use("/v1/user", require("./api/v1/routes/user"));
+app.use("/v1/profile", require("./api/v1/routes/profile"));
+app.use("/v1/posts", require("./api/v1/routes/posts"));
 
-const PORT = process.env.PORT || 4500;
+// Menjalankan server
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
-  console.log(`Visit http://localhost:${PORT}`);
-  console.log(`Developed by ${config.get("author")}`);
+  console.log(chalk`Visit {rgb(128, 237, 153) ${URI}}`);
+  console.log(chalk`Developed by {rgb(255, 92, 88) ${AUTHOR}}`);
 });

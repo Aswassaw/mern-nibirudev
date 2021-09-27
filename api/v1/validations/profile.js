@@ -1,20 +1,20 @@
 const { check } = require("express-validator");
 
-// Validasi untuk endpoint: POST api/profile
+// Validation: api/profile
 const postCurrentProfileValidation = [
   check("status", "Status is required").not().isEmpty(),
   check("skills", "Skills is required").not().isEmpty(),
 ];
 
-// Validasi untuk endpoint: PUT api/profile/experience
-const putProfileExperienceValidation = [
+// Validation: api/profile/experience
+const postProfileExperienceValidation = [
   check("title", "Title is required").not().isEmpty(),
   check("company", "Company is required").not().isEmpty(),
   check("from", "From Date is required").not().isEmpty(),
 ];
 
-// Validasi untuk endpoint: PUT api/profile/education
-const putProfileEducationValidation = [
+// Validation: api/profile/education
+const postProfileEducationValidation = [
   check("school", "School is required").not().isEmpty(),
   check("degree", "Degree is required").not().isEmpty(),
   check("fieldOfStudy", "Field Of Study is required").not().isEmpty(),
@@ -23,6 +23,6 @@ const putProfileEducationValidation = [
 
 module.exports = {
   postCurrentProfileValidation,
-  putProfileExperienceValidation,
-  putProfileEducationValidation,
+  postProfileExperienceValidation,
+  postProfileEducationValidation,
 };
