@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  SET_LOADING,
   REGISTER_FAIL,
   REGISTER_SUCCESS,
   LOGIN_SUCCESS,
@@ -7,6 +8,7 @@ import {
   AUTH_SUCCESS,
   AUTH_FAIL,
   LOGOUT,
+  REMOVE_ALERT,
 } from "./types";
 import { API_URL } from "../utils/constant";
 import { setAlert } from "./alert";
@@ -34,10 +36,22 @@ export const authUser = () => async (dispatch) => {
   }
 };
 
+// Set Loading
+export const setLoading = () => async (dispatch) => {
+  dispatch({
+    type: SET_LOADING,
+  });
+};
+
 // Register User
 export const register =
   ({ name, email, password }) =>
   async (dispatch) => {
+    dispatch({
+      type: REMOVE_ALERT,
+      payload: { clean: true },
+    });
+
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -80,6 +94,11 @@ export const register =
 export const login =
   ({ email, password }) =>
   async (dispatch) => {
+    dispatch({
+      type: REMOVE_ALERT,
+      payload: { clean: true },
+    });
+
     const config = {
       headers: {
         "Content-Type": "application/json",

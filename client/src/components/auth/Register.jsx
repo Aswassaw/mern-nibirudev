@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setAlert } from "../../actions/alert";
-import { register } from "../../actions/auth";
+import { register, setLoading } from "../../actions/auth";
 import Alert from "../layout/Alert";
 
 const Register = () => {
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, loading } = useSelector((state) => state.auth);
   const alerts = useSelector((state) => state.alert);
   const dispatch = useDispatch();
 
@@ -46,6 +46,7 @@ const Register = () => {
         })
       );
     } else {
+      dispatch(setLoading());
       dispatch(register({ name, email, password }));
     }
   };
@@ -58,9 +59,7 @@ const Register = () => {
       </p>
       {alerts !== null &&
         alerts.length > 0 &&
-        alerts.map((alert) => (
-          <Alert key={alert.id} alert={alert} />
-        ))}
+        alerts.map((alert) => <Alert key={alert.id} alert={alert} />)}
       <form className="form" onSubmit={onSubmitHandler}>
         <div className="form-group">
           <input

@@ -296,7 +296,7 @@
   border-radius: 2px;
   font-family: "Open Sans", sans-serif;
 }
-.form input[type="submit"] {
+.form input[type="submit"], button[type="submit"] {
   font-family: "Open Sans", sans-serif;
 }
 .form .social-input {

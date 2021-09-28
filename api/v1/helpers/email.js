@@ -8,7 +8,7 @@ const sendEmail = (dataEmail) => {
     requireTLS: true,
     auth: {
       user: "aswassawexe2@gmail.com",
-      pass: "aswassawexe2##asw",
+      pass: "aswassawexe2##asw1",
     },
   });
 

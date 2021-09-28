@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { login } from "../../actions/auth";
+import { login, setLoading } from "../../actions/auth";
 import Alert from "../layout/Alert";
+import Loading from "../layout/Loading";
 
 const Login = () => {
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, loading } = useSelector((state) => state.auth);
   const alerts = useSelector((state) => state.alert);
   const dispatch = useDispatch();
 
@@ -15,9 +16,13 @@ const Login = () => {
   });
   const { email, password } = formData;
 
+  useEffect(() => {
+    document.title = "NibiruDev - Login";
+  }, []);
+
   // Redirect if logged in
   if (isAuthenticated) {
-    return <Redirect to="/dashboard" />
+    return <Redirect to="/dashboard" />;
   }
 
   const onChangeHandler = (e) =>
@@ -29,6 +34,7 @@ const Login = () => {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
 
+    dispatch(setLoading());
     dispatch(login({ email, password }));
   };
 
@@ -65,7 +71,13 @@ const Login = () => {
             required
           />
         </div>
-        <input type="submit" value="Login" className="btn btn-primary" />
+        <button
+          className="btn btn-primary"
+          type="submit"
+          disabled={loading && true}
+        >
+          {loading ? <Loading /> : "Login"}
+        </button>
       </form>
       <p className="my-1">
         Haven't account yet? <Link to="register">Register</Link>
