@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { login, setLoading } from "../../actions/auth";
+import { login } from "../../actions/auth";
 import Alert from "../layout/Alert";
-import Loading from "../layout/Loading";
 
 const Login = () => {
-  const { isAuthenticated, loading } = useSelector((state) => state.auth);
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const alerts = useSelector((state) => state.alert);
   const dispatch = useDispatch();
 
@@ -34,7 +33,6 @@ const Login = () => {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
 
-    dispatch(setLoading());
     dispatch(login({ email, password }));
   };
 
@@ -71,13 +69,7 @@ const Login = () => {
             required
           />
         </div>
-        <button
-          className="btn btn-primary"
-          type="submit"
-          disabled={loading && true}
-        >
-          {loading ? <Loading /> : "Login"}
-        </button>
+        <input type="submit" value="Login" className="btn btn-primary" />
       </form>
       <p className="my-1">
         Haven't account yet? <Link to="register">Register</Link>

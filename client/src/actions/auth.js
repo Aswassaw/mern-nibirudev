@@ -1,6 +1,5 @@
 import axios from "axios";
 import {
-  SET_LOADING,
   REGISTER_FAIL,
   REGISTER_SUCCESS,
   LOGIN_SUCCESS,
@@ -34,13 +33,6 @@ export const authUser = () => async (dispatch) => {
       type: AUTH_FAIL,
     });
   }
-};
-
-// Set Loading
-export const setLoading = () => async (dispatch) => {
-  dispatch({
-    type: SET_LOADING,
-  });
 };
 
 // Register User

@@ -6,7 +6,6 @@ import {
   AUTH_FAIL,
   AUTH_SUCCESS,
   LOGOUT,
-  SET_LOADING,
 } from "../actions/types";
 
 const initialState = {
@@ -20,11 +19,6 @@ const authReducer = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
-    case SET_LOADING:
-      return {
-        ...state,
-        loading: true,
-      }
     case REGISTER_SUCCESS:
       localStorage.setItem("token", payload);
       return {
