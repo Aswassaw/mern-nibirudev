@@ -5,6 +5,7 @@ import store from "./store";
 import "./App.css";
 import setAuthToken from "./utils/setAuthToken";
 import { authUser } from "./actions/auth";
+import PrivateRoute from "./components/routing/PrivateRoute";
 import Navbar from "./components/layout/Navbar";
 import Landing from "./components/layout/Landing";
 import Login from "./components/auth/Login";
@@ -28,7 +29,7 @@ const App = () => {
           <Route exact path="/" component={Landing} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
-          <Route exact path="/dashboard" component={Dashboard} />
+          <PrivateRoute exact path="/dashboard" component={Dashboard} />
         </Fragment>
       </Router>
     </Provider>
