@@ -8,6 +8,7 @@ import {
   AUTH_FAIL,
   LOGOUT,
   REMOVE_ALERT,
+  CLEAR_PROFILE,
 } from "./types";
 import { API_URL } from "../utils/constant";
 import { setAlert } from "./alert";
@@ -133,5 +134,8 @@ export const login =
 export const logout = () => (dispatch) => {
   dispatch({
     type: LOGOUT,
+  });
+  dispatch({
+    type: CLEAR_PROFILE,
   });
 };

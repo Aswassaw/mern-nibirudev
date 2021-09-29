@@ -14,3 +14,4 @@ export const AUTH_FAIL = "AUTH_FAIL";
 // Profile
 export const PROFILE_SUCCESS = "PROFILE_SUCCESS";
 export const PROFILE_ERROR = "PROFILE_ERROR";
+export const CLEAR_PROFILE = "CLEAR_PROFILE";
