@@ -11,6 +11,7 @@ import Landing from "./components/layout/Landing";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Dashboard from "./components/dashboard/Dashboard";
+import CreateProfile from "./components/profile-forms/CreateProfile";
 
 if (localStorage.getItem("token")) {
   setAuthToken(localStorage.getItem("token"));
@@ -19,7 +20,7 @@ if (localStorage.getItem("token")) {
 const App = () => {
   useEffect(() => {
     store.dispatch(authUser());
-  }, [])
+  }, []);
 
   return (
     <Provider store={store}>
@@ -30,6 +31,11 @@ const App = () => {
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
           <PrivateRoute exact path="/dashboard" component={Dashboard} />
+          <PrivateRoute
+            exact
+            path="/create-profile"
+            component={CreateProfile}
+          />
         </Fragment>
       </Router>
     </Provider>
