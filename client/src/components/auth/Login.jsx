@@ -3,10 +3,11 @@ import { Link, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { login } from "../../actions/auth";
 import Alert from "../layout/Alert";
+import { removeAlert } from "../../actions/alert";
 
 const Login = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
-  const alerts = useSelector((state) => state.alert);
+  const { page, alerts } = useSelector((state) => state.alert);
   const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
@@ -17,7 +18,11 @@ const Login = () => {
 
   useEffect(() => {
     document.title = "NibiruDev - Login";
-  }, []);
+
+    if (page !== "login") {
+      dispatch(removeAlert());
+    }
+  }, [dispatch, page]);
 
   // Redirect if logged in
   if (isAuthenticated) {

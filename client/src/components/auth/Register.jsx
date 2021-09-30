@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setAlert } from "../../actions/alert";
+import { setAlertPage, setAlert, removeAlert } from "../../actions/alert";
 import { register } from "../../actions/auth";
 import Alert from "../layout/Alert";
 
 const Register = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
-  const alerts = useSelector((state) => state.alert);
+  const { page, alerts } = useSelector((state) => state.alert);
   const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
@@ -20,7 +20,11 @@ const Register = () => {
 
   useEffect(() => {
     document.title = "NibiruDev - Register";
-  }, []);
+
+    if(page !== "register") {
+      dispatch(removeAlert());
+    }
+  }, [dispatch, page]);
 
   // Redirect if logged in
   if (isAuthenticated) {
@@ -37,6 +41,7 @@ const Register = () => {
     e.preventDefault();
 
     if (password !== password2) {
+      dispatch(setAlertPage("register"));
       dispatch(
         setAlert({
           msg: "Passwords do not match",

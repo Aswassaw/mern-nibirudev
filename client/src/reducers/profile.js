@@ -25,7 +25,6 @@ const profileReducer = (state = initialState, action) => {
     case PROFILE_ERROR:
       return {
         ...state,
-        profile: null,
         error: payload,
         loading: false,
       };

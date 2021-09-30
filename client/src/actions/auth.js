@@ -7,11 +7,10 @@ import {
   AUTH_SUCCESS,
   AUTH_FAIL,
   LOGOUT,
-  REMOVE_ALERT,
   CLEAR_PROFILE,
 } from "./types";
 import { API_URL } from "../utils/constant";
-import { setAlert } from "./alert";
+import { removeAlert, setAlert, setAlertPage } from "./alert";
 import setAuthToken from "../utils/setAuthToken";
 
 // Auth User
@@ -40,10 +39,7 @@ export const authUser = () => async (dispatch) => {
 export const register =
   ({ name, email, password }) =>
   async (dispatch) => {
-    dispatch({
-      type: REMOVE_ALERT,
-      payload: { clean: true },
-    });
+    dispatch(removeAlert());
 
     const config = {
       headers: {
@@ -59,6 +55,14 @@ export const register =
         type: REGISTER_SUCCESS,
         payload: res.data.token,
       });
+      dispatch(setAlertPage("dashboard"));
+      dispatch(
+        setAlert({
+          msg: res.data.msg,
+          type: "success",
+          timeout: 10,
+        })
+      );
       dispatch(authUser());
     } catch (err) {
       console.error(err.message);
@@ -67,9 +71,10 @@ export const register =
         type: REGISTER_FAIL,
       });
 
-      const errors = err.response.data.errors;
-      if (errors) {
-        errors.forEach(({ msg, param }) => {
+      dispatch(setAlertPage("register"));
+      const res = err.response.data;
+      if (res.errors) {
+        res.errors.forEach(({ msg, param }) => {
           dispatch(
             setAlert({
               msg,
@@ -87,10 +92,7 @@ export const register =
 export const login =
   ({ email, password }) =>
   async (dispatch) => {
-    dispatch({
-      type: REMOVE_ALERT,
-      payload: { clean: true },
-    });
+    dispatch(removeAlert());
 
     const config = {
       headers: {
@@ -106,6 +108,14 @@ export const login =
         type: LOGIN_SUCCESS,
         payload: res.data.token,
       });
+      dispatch(setAlertPage("dashboard"));
+      dispatch(
+        setAlert({
+          msg: res.data.msg,
+          type: "success",
+          timeout: 10,
+        })
+      );
       dispatch(authUser());
     } catch (err) {
       console.error(err.message);
@@ -114,9 +124,10 @@ export const login =
         type: LOGIN_FAIL,
       });
 
-      const errors = err.response.data.errors;
-      if (errors) {
-        errors.forEach(({ msg, param }) => {
+      dispatch(setAlertPage("login"));
+      const res = err.response.data;
+      if (res.errors) {
+        res.errors.forEach(({ msg, param }) => {
           dispatch(
             setAlert({
               msg,
@@ -132,6 +143,7 @@ export const login =
 
 // Logout / Clear Profile
 export const logout = () => (dispatch) => {
+  dispatch(removeAlert());
   dispatch({
     type: LOGOUT,
   });

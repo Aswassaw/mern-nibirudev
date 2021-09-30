@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { logout } from "../../actions/auth";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
@@ -10,15 +11,27 @@ const Navbar = () => {
   const onClickHandler = (e) => {
     e.preventDefault();
 
-    dispatch(logout());
+    Swal.fire({
+      title: "Logout?",
+      text: "You would be logout!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(logout());
+      }
+    });
   };
 
   const authLinks = (
     <ul>
       <li>
         <NavLink exact to="/dashboard">
-        <i className="fas fa-user"></i>{" "}
-        <span className="hide-sm">Dashboard</span>
+          <i className="fas fa-user"></i>{" "}
+          <span className="hide-sm">Dashboard</span>
         </NavLink>
       </li>
       <li>

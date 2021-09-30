@@ -1,26 +1,32 @@
-import { SET_ALERT, REMOVE_ALERT } from "../actions/types";
+import { SET_ALERT, REMOVE_ALERT, SET_ALERT_PAGE } from "../actions/types";
 
-const initialState = [];
+const initialState = { page: null, alerts: [] };
 
 const alertReducer = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
+    case SET_ALERT_PAGE:
+      return { ...state, page: payload };
     case SET_ALERT:
-      state.forEach((alertEach) => {
-        if (alertEach.name === payload.name) {
-          state = state.filter(
-            (alertFilter) => alertFilter.id !== alertEach.id
+      state.alerts.forEach((stateAlertEach) => {
+        if (stateAlertEach.name === payload.name) {
+          state.alerts = state.alerts.filter(
+            (stateAlertFilter) => stateAlertFilter.id !== stateAlertEach.id
           );
         }
       });
 
-      return [...state, payload];
+      return { ...state, alerts: [...state.alerts, payload] };
     case REMOVE_ALERT:
       if (payload.clean) {
-        return [];
+        return { ...state, alerts: [] };
       }
-      return state.filter((alert) => alert.id !== payload.id);
+
+      const filteredAlerts = state.alerts.filter(
+        (alert) => alert.id !== payload.id
+      );
+      return { ...state, alerts: filteredAlerts };
     default:
       return state;
   }

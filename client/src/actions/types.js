@@ -1,4 +1,5 @@
 // Alert
+export const SET_ALERT_PAGE = "SET_ALERT_PAGE";
 export const SET_ALERT = "SET_ALERT";
 export const REMOVE_ALERT = "REMOVE_ALERT";
 

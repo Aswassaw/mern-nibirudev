@@ -4,12 +4,12 @@ const { check } = require("express-validator");
 const postCurrentProfileValidation = [
   check("status", "Status is required").not().isEmpty(),
   check("skills", "Skills is required").not().isEmpty(),
-  check("website", "Website is not valid Url").isURL(),
-  check("twitter", "Twitter is not valid Url").isURL(),
-  check("facebook", "Facebook is not valid Url").isURL(),
-  check("linkedin", "Linkedin is not valid Url").isURL(),
-  check("instagram", "Instagram is not valid Url").isURL(),
-  check("youtube", "Youtube is not valid Url").isURL(),
+  // check("website", "Website is not valid Url").isURL(),
+  // check("twitter", "Twitter is not valid Url").isURL(),
+  // check("facebook", "Facebook is not valid Url").isURL(),
+  // check("linkedin", "Linkedin is not valid Url").isURL(),
+  // check("instagram", "Instagram is not valid Url").isURL(),
+  // check("youtube", "Youtube is not valid Url").isURL(),
 ];
 
 // Validation: api/profile/experience

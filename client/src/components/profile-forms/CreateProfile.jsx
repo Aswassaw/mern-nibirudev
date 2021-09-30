@@ -1,9 +1,16 @@
 import React, { useState, Fragment, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+import { removeAlert, setAlert, setAlertPage } from "../../actions/alert";
+import { createOrUpdateProfile } from "../../actions/profile";
+import Alert from "../layout/Alert";
 
 const CreateProfile = () => {
   const { user } = useSelector((state) => state.auth);
+  const { page, alerts } = useSelector((state) => state.alert);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
   const [formData, setFormData] = useState({
     company: "",
     website: "",
@@ -37,7 +44,11 @@ const CreateProfile = () => {
 
   useEffect(() => {
     document.title = `NibiruDev - Create Profile ${user ? user.name : ""}`;
-  }, [user]);
+
+    if (page !== "create-profile") {
+      dispatch(removeAlert(true));
+    }
+  }, [dispatch, page, user]);
 
   const onChangeHandler = (e) =>
     setFormData((c) => ({
@@ -47,6 +58,18 @@ const CreateProfile = () => {
 
   const onSubmithandler = (e) => {
     e.preventDefault();
+
+    if (user.verified) {
+      dispatch(createOrUpdateProfile(formData, history));
+    } else {
+      dispatch(setAlertPage("create-profile"));
+      dispatch(
+        setAlert({
+          msg: "You're not verified yet",
+          type: "danger",
+        })
+      );
+    }
   };
 
   return (
@@ -57,7 +80,11 @@ const CreateProfile = () => {
         profile stand out
       </p>
       <small>* = required fields</small>
-
+      {alerts !== null &&
+        alerts.length > 0 &&
+        alerts.map((alert) => (
+          <Alert key={alert.id} alert={alert} timeout={10} />
+        ))}
       <form className="form" onSubmit={onSubmithandler}>
         <div className="form-group">
           <select name="status" value={status} onChange={onChangeHandler}>
