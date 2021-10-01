@@ -140,6 +140,7 @@ const EditProfile = () => {
             value={skills}
             onChange={onChangeHandler}
             placeholder="* Skills"
+            required
           />
           <small className="form-text">
             Please use comma separated values (eg. HTML,CSS,JavaScript,PHP)

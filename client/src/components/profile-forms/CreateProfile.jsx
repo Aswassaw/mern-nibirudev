@@ -150,6 +150,7 @@ const CreateProfile = () => {
             name="skills"
             value={skills}
             onChange={onChangeHandler}
+            required
             placeholder="* Skills"
           />
           <small className="form-text">
