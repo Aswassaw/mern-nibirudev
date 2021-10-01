@@ -66,6 +66,11 @@ const CreateProfile = () => {
     e.preventDefault();
 
     if (user.verified) {
+      for (let prop in formData) {
+        if (formData[prop] === "") {
+          formData[prop] = undefined;
+        }
+      }
       dispatch(createOrUpdateProfile(formData, history));
     } else {
       dispatch(setAlertPage("create-profile"));

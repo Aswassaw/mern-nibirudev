@@ -35,7 +35,7 @@ const AddExperience = () => {
     if (!profile) {
       history.push("/dashboard");
     }
-  }, [dispatch, page]);
+  }, [dispatch, history, page, profile]);
 
   const onChangeHandler = (e) =>
     setFormData((c) => ({

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { PROFILE_SUCCESS, PROFILE_ERROR, UPDATE_PROFILE } from "./types";
+import { PROFILE_SUCCESS, PROFILE_ERROR } from "./types";
 import { API_URL } from "../utils/constant";
 import { removeAlert, setAlert, setAlertPage } from "./alert";
 
@@ -28,7 +28,8 @@ export const getCurrentProfile = () => async (dispatch) => {
 
 // Create or Update Profile
 export const createOrUpdateProfile =
-  (formData, history) => async (dispatch) => {
+  (formData, history, edit = false) =>
+  async (dispatch) => {
     dispatch(removeAlert());
 
     try {
@@ -54,7 +55,11 @@ export const createOrUpdateProfile =
     } catch (err) {
       console.error(err.message);
 
-      dispatch(setAlertPage("create-profile"));
+      if (edit) {
+        dispatch(setAlertPage("edit-profile"));
+      } else {
+        dispatch(setAlertPage("create-profile"));
+      }
       const res = err.response.data;
       if (res.errors) {
         res.errors.forEach(({ msg, param }) => {

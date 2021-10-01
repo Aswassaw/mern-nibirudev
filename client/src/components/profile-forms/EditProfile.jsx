@@ -20,11 +20,11 @@ const EditProfile = () => {
     skills: profile ? profile.skills.join() : "",
     githubUsername: profile ? profile.githubUsername : "",
     bio: profile ? profile.bio : "",
-    twitter: profile ? profile.twitter : "",
-    facebook: profile ? profile.facebook : "",
-    linkedin: profile ? profile.linkedin : "",
-    youtube: profile ? profile.youtube : "",
-    instagram: profile ? profile.instagram : "",
+    twitter: profile ? profile.social.twitter : "",
+    facebook: profile ? profile.social.facebook : "",
+    linkedin: profile ? profile.social.linkedin : "",
+    youtube: profile ? profile.social.youtube : "",
+    instagram: profile ? profile.social.instagram : "",
   });
   const [socialToggle, setSocialToggle] = useState(false);
 
@@ -64,7 +64,12 @@ const EditProfile = () => {
   const onSubmithandler = (e) => {
     e.preventDefault();
 
-    dispatch(createOrUpdateProfile(formData, history));
+    for(let prop in formData) {
+      if(formData[prop] === "") {
+        formData[prop] = undefined;
+      }
+    }
+    dispatch(createOrUpdateProfile(formData, history, true));
   };
 
   return (
@@ -101,7 +106,7 @@ const EditProfile = () => {
           <input
             type="text"
             name="company"
-            value={company}
+            value={company || ""}
             onChange={onChangeHandler}
             placeholder="Company"
           />
@@ -113,7 +118,7 @@ const EditProfile = () => {
           <input
             type="text"
             name="website"
-            value={website}
+            value={website || ""}
             onChange={onChangeHandler}
             placeholder="Website"
           />
@@ -125,7 +130,7 @@ const EditProfile = () => {
           <input
             type="text"
             name="location"
-            value={location}
+            value={location || ""}
             onChange={onChangeHandler}
             placeholder="Location"
           />
@@ -137,7 +142,7 @@ const EditProfile = () => {
           <input
             type="text"
             name="skills"
-            value={skills}
+            value={skills || ""}
             onChange={onChangeHandler}
             placeholder="* Skills"
             required
@@ -150,7 +155,7 @@ const EditProfile = () => {
           <input
             type="text"
             name="githubUsername"
-            value={githubUsername}
+            value={githubUsername || ""}
             onChange={onChangeHandler}
             placeholder="Github Username"
           />
@@ -162,7 +167,7 @@ const EditProfile = () => {
         <div className="form-group">
           <textarea
             name="bio"
-            value={bio}
+            value={bio || ""}
             onChange={onChangeHandler}
             placeholder="A short bio of yourself"
           ></textarea>
@@ -187,7 +192,7 @@ const EditProfile = () => {
               <input
                 type="text"
                 placeholder="Twitter URL"
-                value={twitter}
+                value={twitter || ""}
                 onChange={onChangeHandler}
                 name="twitter"
               />
@@ -198,7 +203,7 @@ const EditProfile = () => {
               <input
                 type="text"
                 placeholder="Facebook URL"
-                value={facebook}
+                value={facebook || ""}
                 onChange={onChangeHandler}
                 name="facebook"
               />
@@ -209,7 +214,7 @@ const EditProfile = () => {
               <input
                 type="text"
                 placeholder="YouTube URL"
-                value={youtube}
+                value={youtube || ""}
                 onChange={onChangeHandler}
                 name="youtube"
               />
@@ -220,7 +225,7 @@ const EditProfile = () => {
               <input
                 type="text"
                 placeholder="Linkedin URL"
-                value={linkedin}
+                value={linkedin || ""}
                 onChange={onChangeHandler}
                 name="linkedin"
               />
@@ -231,7 +236,7 @@ const EditProfile = () => {
               <input
                 type="text"
                 placeholder="Instagram URL"
-                value={instagram}
+                value={instagram || ""}
                 onChange={onChangeHandler}
                 name="instagram"
               />
