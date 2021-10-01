@@ -3,13 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { removeAlert } from "../../actions/alert";
 import { getCurrentProfile } from "../../actions/profile";
+import setAuthToken from "../../utils/setAuthToken";
 import Alert from "../layout/Alert";
 import Spinner from "../layout/Spinner";
+import DashboardActions from "./DashboardActions";
 
 const Dashboard = () => {
   const { user } = useSelector((state) => state.auth);
   const { page, alerts } = useSelector((state) => state.alert);
-  const { profile, error, loading } = useSelector((state) => state.profile);
+  const { profile, loading } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -18,7 +20,10 @@ const Dashboard = () => {
     if (page !== "dashboard") {
       dispatch(removeAlert());
     }
-
+    
+    if (localStorage.getItem("token")) {
+      setAuthToken(localStorage.getItem("token"));
+    }
     dispatch(getCurrentProfile());
   }, [dispatch, page]);
 
@@ -39,7 +44,9 @@ const Dashboard = () => {
           </p>
 
           {profile !== null ? (
-            <Fragment>has</Fragment>
+            <Fragment>
+              <DashboardActions />
+            </Fragment>
           ) : (
             <Fragment>
               <p>You have no profile yet</p>

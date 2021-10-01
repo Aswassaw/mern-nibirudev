@@ -40,6 +40,8 @@ export const createOrUpdateProfile =
 
       // Post data profile
       const res = await axios.post(API_URL + "/v1/profile", formData, config);
+      
+      history.push("/dashboard");
 
       dispatch(setAlertPage("dashboard"));
       dispatch(
@@ -49,8 +51,6 @@ export const createOrUpdateProfile =
           timeout: 10,
         })
       );
-
-      history.push("/dashboard");
     } catch (err) {
       console.error(err.message);
 

@@ -1,11 +1,11 @@
 import React, { useState, Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import { removeAlert, setAlert, setAlertPage } from "../../actions/alert";
-import { createOrUpdateProfile, getCurrentProfile } from "../../actions/profile";
+import { removeAlert } from "../../actions/alert";
+import { createOrUpdateProfile } from "../../actions/profile";
 import Alert from "../layout/Alert";
 
-const CreateProfile = () => {
+const EditProfile = () => {
   const { user } = useSelector((state) => state.auth);
   const { page, alerts } = useSelector((state) => state.alert);
   const { profile } = useSelector((state) => state.profile);
@@ -13,18 +13,18 @@ const CreateProfile = () => {
   const history = useHistory();
 
   const [formData, setFormData] = useState({
-    company: "",
-    website: "",
-    location: "",
-    status: "",
-    skills: "",
-    githubUsername: "",
-    bio: "",
-    twitter: "",
-    facebook: "",
-    linkedin: "",
-    youtube: "",
-    instagram: "",
+    company: profile ? profile.company : "",
+    website: profile ? profile.website : "",
+    location: profile ? profile.location : "",
+    status: profile ? profile.status : "",
+    skills: profile ? profile.skills.join() : "",
+    githubUsername: profile ? profile.githubUsername : "",
+    bio: profile ? profile.bio : "",
+    twitter: profile ? profile.twitter : "",
+    facebook: profile ? profile.facebook : "",
+    linkedin: profile ? profile.linkedin : "",
+    youtube: profile ? profile.youtube : "",
+    instagram: profile ? profile.instagram : "",
   });
   const [socialToggle, setSocialToggle] = useState(false);
 
@@ -44,14 +44,13 @@ const CreateProfile = () => {
   } = formData;
 
   useEffect(() => {
-    document.title = `NibiruDev - Create Profile ${user ? user.name : ""}`;
+    document.title = `NibiruDev - Edit Profile ${user ? user.name : ""}`;
 
-    if (page !== "create-profile") {
+    if (page !== "edit-profile") {
       dispatch(removeAlert(true));
     }
 
-    dispatch(getCurrentProfile());
-    if (profile) {
+    if (!profile) {
       history.push("/dashboard");
     }
   }, [dispatch, history, page, profile, user]);
@@ -65,22 +64,12 @@ const CreateProfile = () => {
   const onSubmithandler = (e) => {
     e.preventDefault();
 
-    if (user.verified) {
-      dispatch(createOrUpdateProfile(formData, history));
-    } else {
-      dispatch(setAlertPage("create-profile"));
-      dispatch(
-        setAlert({
-          msg: "You're not verified yet",
-          type: "danger",
-        })
-      );
-    }
+    dispatch(createOrUpdateProfile(formData, history));
   };
 
   return (
     <div className="container">
-      <h1 className="large text-primary">Create Your Profile</h1>
+      <h1 className="large text-primary">Edit Your Profile</h1>
       <p className="lead">
         <i className="fas fa-user"></i> Let's get some information to make your
         profile stand out
@@ -257,4 +246,4 @@ const CreateProfile = () => {
   );
 };
 
-export default CreateProfile;
+export default EditProfile;
