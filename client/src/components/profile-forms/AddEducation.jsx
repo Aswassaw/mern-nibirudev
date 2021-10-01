@@ -8,6 +8,7 @@ import Alert from '../layout/Alert';
 
 const AddEducation = () => {
   const { page, alerts } = useSelector((state) => state.alert);
+  const { profile } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -30,6 +31,10 @@ const AddEducation = () => {
 
     if (page !== "add-education") {
       dispatch(removeAlert());
+    }
+
+    if (!profile) {
+      history.push("/dashboard");
     }
   }, [dispatch, page]);
 
@@ -68,10 +73,10 @@ const AddEducation = () => {
           <input type="text" placeholder="* Degree or Certificate" name="degree" onChange={onChangeHandler} value={degree} required />
         </div>
         <div className="form-group">
-          <input type="text" placeholder="Field Of Study" name="fieldOfStudy" onChange={onChangeHandler} value={fieldOfStudy} />
+          <input type="text" placeholder="* Field Of Study" name="fieldOfStudy" onChange={onChangeHandler} value={fieldOfStudy} />
         </div>
         <div className="form-group">
-          <h4>From Date</h4>
+          <h4>* From Date</h4>
           <input type="date" name="from" value={from} onChange={onChangeHandler} />
         </div>
         <div className="form-group">

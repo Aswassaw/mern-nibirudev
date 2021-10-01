@@ -7,6 +7,7 @@ import Alert from '../layout/Alert';
 
 const AddExperience = () => {
   const { page, alerts } = useSelector((state) => state.alert);
+  const { profile } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -29,6 +30,10 @@ const AddExperience = () => {
 
     if (page !== "add-experience") {
       dispatch(removeAlert());
+    }
+
+    if (!profile) {
+      history.push("/dashboard");
     }
   }, [dispatch, page]);
 
@@ -70,7 +75,7 @@ const AddExperience = () => {
           <input type="text" placeholder="Location" onChange={onChangeHandler} value={location} name="location" />
         </div>
         <div className="form-group">
-          <h4>From Date</h4>
+          <h4>* From Date</h4>
           <input type="date" onChange={onChangeHandler} value={from} name="from" />
         </div>
         <div className="form-group">
