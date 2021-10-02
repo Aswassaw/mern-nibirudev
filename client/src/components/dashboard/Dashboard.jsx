@@ -1,8 +1,9 @@
 import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import Swal from 'sweetalert2';
 import { removeAlert } from "../../actions/alert";
-import { getCurrentProfile } from "../../actions/profile";
+import { deleteAccount, getCurrentProfile } from "../../actions/profile";
 import setAuthToken from "../../utils/setAuthToken";
 import Alert from "../layout/Alert";
 import Spinner from "../layout/Spinner";
@@ -22,12 +23,28 @@ const Dashboard = () => {
     if (page !== "dashboard") {
       dispatch(removeAlert());
     }
-    
+
     if (localStorage.getItem("token")) {
       setAuthToken(localStorage.getItem("token"));
     }
     dispatch(getCurrentProfile());
   }, [dispatch, page]);
+
+  const onClickHandler = () => {
+    Swal.fire({
+      title: "Delete Account?",
+      text: "You can't revert this action!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteAccount())
+      }
+    });
+  }
 
   return (
     <div className="container">
@@ -50,6 +67,12 @@ const Dashboard = () => {
               <DashboardActions />
               <Experience experience={profile.experience} />
               <Education education={profile.education} />
+
+              <div class="my-2">
+                <button class="btn btn-danger" onClick={onClickHandler}>
+                  <i class="fas fa-user-minus"></i> Delete Account
+                </button>
+              </div>
             </Fragment>
           ) : (
             <Fragment>

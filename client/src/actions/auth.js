@@ -145,10 +145,6 @@ export const login =
 // Logout / Clear Profile
 export const logout = () => (dispatch) => {
   dispatch(removeAlert());
-  dispatch({
-    type: LOGOUT,
-  });
-  dispatch({
-    type: CLEAR_PROFILE,
-  });
+  dispatch({ type: LOGOUT });
+  dispatch({ type: CLEAR_PROFILE });
 };

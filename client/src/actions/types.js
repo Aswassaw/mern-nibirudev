@@ -11,6 +11,7 @@ export const LOGIN_FAIL = "LOGIN_FAIL";
 export const LOGOUT = "LOGOUT";
 export const AUTH_SUCCESS = "AUTH_SUCCESS";
 export const AUTH_FAIL = "AUTH_FAIL";
+export const ACCOUNT_DELETED = "ACCOUNT_DELETED";
 
 // Profile
 export const PROFILE_SUCCESS = "PROFILE_SUCCESS";

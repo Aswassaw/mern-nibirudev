@@ -1,7 +1,13 @@
 import axios from "axios";
-import { PROFILE_SUCCESS, PROFILE_ERROR } from "./types";
+import {
+  PROFILE_SUCCESS,
+  PROFILE_ERROR,
+  CLEAR_PROFILE,
+  ACCOUNT_DELETED,
+} from "./types";
 import { API_URL } from "../utils/constant";
 import { removeAlert, setAlert, setAlertPage } from "./alert";
+import { logout } from "./auth";
 
 // Get current user profile
 export const getCurrentProfile = () => async (dispatch) => {
@@ -85,7 +91,6 @@ export const addExperience = (formData, history) => async (dispatch) => {
       },
     };
 
-    // Post data profile
     const res = await axios.post(
       API_URL + "/v1/profile/experience",
       formData,
@@ -131,7 +136,6 @@ export const addEducation = (formData, history) => async (dispatch) => {
       },
     };
 
-    // Post data profile
     const res = await axios.post(
       API_URL + "/v1/profile/education",
       formData,
@@ -165,5 +169,97 @@ export const addEducation = (formData, history) => async (dispatch) => {
         );
       });
     }
+  }
+};
+
+// Delete Experience
+export const deleteExperience = (id) => async (dispatch) => {
+  try {
+    // Delete Experience By Id
+    const res = await axios.delete(API_URL + "/v1/profile/experience/" + id);
+
+    dispatch(setAlertPage("dashboard"));
+    dispatch(
+      setAlert({
+        msg: res.data.msg,
+        type: "success",
+        timeout: 10,
+      })
+    );
+    dispatch(getCurrentProfile());
+  } catch (err) {
+    console.error(err.message);
+
+    dispatch(setAlertPage("dashboard"));
+    const res = err.response.data;
+    dispatch(
+      setAlert({
+        msg: res.msg,
+        type: "danger",
+        timeout: 10,
+      })
+    );
+  }
+};
+
+// Delete Education
+export const deleteEducation = (id) => async (dispatch) => {
+  try {
+    // Delete Education By Id
+    const res = await axios.delete(API_URL + "/v1/profile/education/" + id);
+
+    dispatch(setAlertPage("dashboard"));
+    dispatch(
+      setAlert({
+        msg: res.data.msg,
+        type: "success",
+        timeout: 10,
+      })
+    );
+    dispatch(getCurrentProfile());
+  } catch (err) {
+    console.error(err.message);
+
+    dispatch(setAlertPage("dashboard"));
+    const res = err.response.data;
+    dispatch(
+      setAlert({
+        msg: res.msg,
+        type: "danger",
+        timeout: 10,
+      })
+    );
+  }
+};
+
+// Delete Account
+export const deleteAccount = () => async (dispatch) => {
+  try {
+    // Delete Current Account
+    await axios.delete(API_URL + "/v1/user/me");
+
+    dispatch({ type: ACCOUNT_DELETED });
+    dispatch({ type: CLEAR_PROFILE });
+
+    dispatch(setAlertPage("login"));
+    dispatch(
+      setAlert({
+        msg: "Your account has been permanently deleted",
+        type: "success",
+        timeout: 10,
+      })
+    );
+  } catch (err) {
+    console.error(err.message);
+
+    dispatch(setAlertPage("dashboard"));
+    const res = err.response.data;
+    dispatch(
+      setAlert({
+        msg: res.msg,
+        type: "danger",
+        timeout: 10,
+      })
+    );
   }
 };

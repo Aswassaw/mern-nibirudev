@@ -23,9 +23,9 @@ const deleteCurrentUser = async (req, res) => {
     if (!user) return res.status(404).json({ msg: "User not found" });
 
     await Token.findOneAndRemove({ email: user.email });
-    await user.remove();
+    await Post.deleteMany({ user: req.user.id });
     await Profile.findOneAndRemove({ user: req.user.id });
-    await Post.findOneAndRemove({ user: req.user.id });
+    await user.remove();
 
     return res.json({ msg: "User deleted" });
   } catch (err) {
