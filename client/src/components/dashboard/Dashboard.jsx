@@ -7,6 +7,8 @@ import setAuthToken from "../../utils/setAuthToken";
 import Alert from "../layout/Alert";
 import Spinner from "../layout/Spinner";
 import DashboardActions from "./DashboardActions";
+import Education from "./Education";
+import Experience from "./Experience";
 
 const Dashboard = () => {
   const { user } = useSelector((state) => state.auth);
@@ -46,6 +48,8 @@ const Dashboard = () => {
           {profile !== null ? (
             <Fragment>
               <DashboardActions />
+              <Experience experience={profile.experience} />
+              <Education education={profile.education} />
             </Fragment>
           ) : (
             <Fragment>

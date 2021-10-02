@@ -125,6 +125,7 @@ export const login =
       });
 
       dispatch(setAlertPage("login"));
+      console.log(err.response);
       const res = err.response.data;
       if (res.errors) {
         res.errors.forEach(({ msg, param }) => {
