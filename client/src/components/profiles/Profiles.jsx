@@ -8,7 +8,7 @@ import Profileitem from './ProfileItem';
 
 const Profiles = () => {
   const { profiles, loading } = useSelector(state => state.profile)
-  const { page, alerts } = useSelector((state) => state.alert);
+  const { page } = useSelector((state) => state.alert);
   const dispatch = useDispatch();
 
   useEffect(() => {

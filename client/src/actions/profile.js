@@ -95,6 +95,8 @@ export const getGithubRepos = (githubUsername) => async (dispatch) => {
   } catch (err) {
     console.error(err.message);
 
+    console.log(err);
+
     dispatch({
       type: GITHUB_ERROR,
       payload: {
