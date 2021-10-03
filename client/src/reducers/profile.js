@@ -1,5 +1,9 @@
 import {
   CLEAR_PROFILE,
+  GITHUB_ERROR,
+  GITHUB_SUCCESS,
+  PROFILES_ERROR,
+  PROFILES_SUCCESS,
   PROFILE_ERROR,
   PROFILE_SUCCESS,
 } from "../actions/types";
@@ -22,7 +26,21 @@ const profileReducer = (state = initialState, action) => {
         profile: payload,
         loading: false,
       };
+    case PROFILES_SUCCESS:
+      return {
+        ...state,
+        profiles: payload,
+        loading: false,
+      };
+    case GITHUB_SUCCESS:
+      return {
+        ...state,
+        repos: payload,
+        loading: false,
+      };
     case PROFILE_ERROR:
+    case PROFILES_ERROR:
+    case GITHUB_ERROR:
       return {
         ...state,
         error: payload,
@@ -32,6 +50,7 @@ const profileReducer = (state = initialState, action) => {
       return {
         ...state,
         profile: null,
+        profiles: [],
         repos: [],
         loading: false,
       };

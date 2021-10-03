@@ -4,10 +4,13 @@ import {
   PROFILE_ERROR,
   CLEAR_PROFILE,
   ACCOUNT_DELETED,
+  PROFILES_SUCCESS,
+  PROFILES_ERROR,
+  GITHUB_SUCCESS,
+  GITHUB_ERROR,
 } from "./types";
 import { API_URL } from "../utils/constant";
 import { removeAlert, setAlert, setAlertPage } from "./alert";
-import { logout } from "./auth";
 
 // Get current user profile
 export const getCurrentProfile = () => async (dispatch) => {
@@ -31,6 +34,77 @@ export const getCurrentProfile = () => async (dispatch) => {
     });
   }
 };
+
+// Get All Profiles
+export const getProfiles = () => async (dispatch) => {
+  dispatch({type: CLEAR_PROFILE})
+
+  try {
+    const res = await axios.get(API_URL + "/v1/profile");
+
+    dispatch({
+      type: PROFILES_SUCCESS,
+      payload: res.data,
+    });
+  } catch (err) {
+    console.error(err.message);
+
+    dispatch({
+      type: PROFILES_ERROR,
+      payload: {
+        msg: err.response.data.msg || "Error occured",
+        statusText: err.response.statusText,
+        status: err.response.status,
+      },
+    });
+  }
+}
+
+// Get All Profiles
+export const getProfileById = (userId) => async (dispatch) => {
+  try {
+    const res = await axios.get(API_URL + "/v1/profile/user/" + userId);
+
+    dispatch({
+      type: PROFILE_SUCCESS,
+      payload: res.data,
+    });
+  } catch (err) {
+    console.error(err.message);
+
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: {
+        msg: err.response.data.msg || "Error occured",
+        statusText: err.response.statusText,
+        status: err.response.status,
+      },
+    });
+  }
+}
+
+// Get Github Repos
+export const getGithubRepos = (githubUsername) => async (dispatch) => {
+  try {
+    const res = await axios.get(API_URL + "/v1/profile/github/" + githubUsername);
+
+    dispatch({
+      type: GITHUB_SUCCESS,
+      payload: res.data,
+    });
+  } catch (err) {
+    console.error(err.message);
+
+    dispatch({
+      type: GITHUB_ERROR,
+      payload: {
+        msg: err.response.data.msg || "Error occured",
+        statusText: err.response.statusText,
+        status: err.response.status,
+      },
+    });
+  }
+}
 
 // Create or Update Profile
 export const createOrUpdateProfile =
