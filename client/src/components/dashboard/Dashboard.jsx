@@ -68,9 +68,9 @@ const Dashboard = () => {
               <Experience experience={profile.experience} />
               <Education education={profile.education} />
 
-              <div class="my-2">
-                <button class="btn btn-danger" onClick={onClickHandler}>
-                  <i class="fas fa-user-minus"></i> Delete Account
+              <div className="my-2">
+                <button className="btn btn-danger" onClick={onClickHandler}>
+                  <i className="fas fa-user-minus"></i> Delete Account
                 </button>
               </div>
             </Fragment>

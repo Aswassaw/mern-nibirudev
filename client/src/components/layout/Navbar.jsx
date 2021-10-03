@@ -29,6 +29,11 @@ const Navbar = () => {
   const authLinks = (
     <ul>
       <li>
+        <NavLink exact to="/developers">
+          Developers
+        </NavLink>
+      </li>
+      <li>
         <NavLink exact to="/dashboard">
           <i className="fas fa-user"></i>{" "}
           <span className="hide-sm">Dashboard</span>

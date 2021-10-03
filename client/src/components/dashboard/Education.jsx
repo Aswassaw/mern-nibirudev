@@ -27,16 +27,16 @@ const Education = ({ education }) => {
 
   return (
     <Fragment>
-      <h2 class="my-2">
+      <h2 className="my-2">
         Education Credentials
       </h2>
       {
-        education.length > 0 ? <table class="table">
+        education.length > 0 ? <table className="table">
           <thead>
             <tr>
               <th>School</th>
-              <th class="hide-sm">Degree</th>
-              <th class="hide-sm">Years</th>
+              <th className="hide-sm">Degree</th>
+              <th className="hide-sm">Years</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -45,15 +45,15 @@ const Education = ({ education }) => {
               education.map(edu => {
                 return <tr key={edu._id}>
                   <td>{edu.school.slice(0, 20)}</td>
-                  <td class="hide-sm">{edu.degree.slice(0, 20)}</td>
-                  <td class="hide-sm">
+                  <td className="hide-sm">{edu.degree.slice(0, 20)}</td>
+                  <td className="hide-sm">
                     <Moment format="YYYY/MM/DD">{edu.from}</Moment> - {edu.current ? "Now" : <Fragment>
                       {
                         edu.to ? <Moment format="YYYY/MM/DD">{edu.to}</Moment> : "Unknown"
                       }</Fragment>}
                   </td>
                   <td>
-                    <button class="btn btn-danger" onClick={() => onClickHandler(edu._id)}>
+                    <button className="btn btn-danger" onClick={() => onClickHandler(edu._id)}>
                       Delete
                     </button>
                   </td>

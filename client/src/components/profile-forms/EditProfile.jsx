@@ -64,11 +64,6 @@ const EditProfile = () => {
   const onSubmithandler = (e) => {
     e.preventDefault();
 
-    for(let prop in formData) {
-      if(formData[prop] === "") {
-        formData[prop] = undefined;
-      }
-    }
     dispatch(createOrUpdateProfile(formData, history, true));
   };
 
@@ -88,7 +83,7 @@ const EditProfile = () => {
       <form className="form" onSubmit={onSubmithandler}>
         <div className="form-group">
           <select name="status" value={status} onChange={onChangeHandler}>
-            <option value="0">* Select Professional Status</option>
+            <option value="">* Select Professional Status</option>
             <option value="Developer">Developer</option>
             <option value="Junior Developer">Junior Developer</option>
             <option value="Senior Developer">Senior Developer</option>
