@@ -66,6 +66,11 @@ const CreateProfile = () => {
     e.preventDefault();
 
     if (user.verified) {
+      for (let prop in formData) {
+        if (formData[prop] === "") {
+          formData[prop] = undefined;
+        }
+      }
       dispatch(createOrUpdateProfile(formData, history));
     } else {
       dispatch(setAlertPage("create-profile"));
@@ -93,8 +98,8 @@ const CreateProfile = () => {
         ))}
       <form className="form" onSubmit={onSubmithandler}>
         <div className="form-group">
-          <select name="status" value={status} onChange={onChangeHandler} required>
-            <option value="">* Select Professional Status</option>
+          <select name="status" value={status} onChange={onChangeHandler}>
+            <option value="0">* Select Professional Status</option>
             <option value="Developer">Developer</option>
             <option value="Junior Developer">Junior Developer</option>
             <option value="Senior Developer">Senior Developer</option>

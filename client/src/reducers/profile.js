@@ -44,13 +44,13 @@ const profileReducer = (state = initialState, action) => {
       return {
         ...state,
         error: payload,
+        profile: null,
         loading: false,
       };
     case CLEAR_PROFILE:
       return {
         ...state,
         profile: null,
-        profiles: [],
         repos: [],
         loading: false,
       };

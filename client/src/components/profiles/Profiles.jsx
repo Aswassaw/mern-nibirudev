@@ -1,16 +1,22 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Fragment } from 'react/cjs/react.production.min';
+import { removeAlert } from '../../actions/alert';
 import { getProfiles } from '../../actions/profile';
 import Spinner from '../layout/Spinner';
 import Profileitem from './ProfileItem';
 
 const Profiles = () => {
   const { profiles, loading } = useSelector(state => state.profile)
+  const { page, alerts } = useSelector((state) => state.alert);
   const dispatch = useDispatch();
 
   useEffect(() => {
     document.title = "NibiruDev - Developers";
+
+    if (page !== "developers") {
+      dispatch(removeAlert());
+    }
 
     dispatch(getProfiles())
   }, [dispatch]);

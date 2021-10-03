@@ -20,11 +20,11 @@ const EditProfile = () => {
     skills: profile ? profile.skills.join() : "",
     githubUsername: profile ? profile.githubUsername : "",
     bio: profile ? profile.bio : "",
-    twitter: profile ? profile.social.twitter : "",
-    facebook: profile ? profile.social.facebook : "",
-    linkedin: profile ? profile.social.linkedin : "",
-    youtube: profile ? profile.social.youtube : "",
-    instagram: profile ? profile.social.instagram : "",
+    twitter: profile ? profile.social ? profile.social.twitter : "" : "",
+    facebook: profile ? profile.social ? profile.social.facebook : "" : "",
+    linkedin: profile ? profile.social ? profile.social.linkedin : "" : "",
+    youtube: profile ? profile.social ? profile.social.youtube : "" : "",
+    instagram: profile ? profile.social ? profile.social.instagram : "" : "",
   });
   const [socialToggle, setSocialToggle] = useState(false);
 
@@ -64,6 +64,11 @@ const EditProfile = () => {
   const onSubmithandler = (e) => {
     e.preventDefault();
 
+    for (let prop in formData) {
+      if (formData[prop] === "") {
+        formData[prop] = undefined;
+      }
+    }
     dispatch(createOrUpdateProfile(formData, history, true));
   };
 
@@ -83,7 +88,7 @@ const EditProfile = () => {
       <form className="form" onSubmit={onSubmithandler}>
         <div className="form-group">
           <select name="status" value={status} onChange={onChangeHandler}>
-            <option value="">* Select Professional Status</option>
+            <option value="0">* Select Professional Status</option>
             <option value="Developer">Developer</option>
             <option value="Junior Developer">Junior Developer</option>
             <option value="Senior Developer">Senior Developer</option>
