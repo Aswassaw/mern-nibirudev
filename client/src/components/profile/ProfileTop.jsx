@@ -3,7 +3,7 @@ import React from 'react'
 const ProfileTop = ({ profile: { website, social, user, status, company, location } }) => {
   return (
     <div className="profile-top bg-primary p-2">
-      <img className="round-img shadow-img my-1" src="img/profile.jpg" alt="Profile" />
+      <img className="round-img shadow-img my-1" src={user.avatar} alt="Profile" />
       <h1 className="large">{user && user.name}</h1>
       <p className="lead">{status} at {company}</p>
       <p>{location}</p>
