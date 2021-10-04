@@ -34,6 +34,11 @@ const Navbar = () => {
         </NavLink>
       </li>
       <li>
+        <NavLink exact to="/posts">
+          Posts
+        </NavLink>
+      </li>
+      <li>
         <NavLink exact to="/dashboard">
           <i className="fas fa-user"></i>{" "}
           <span className="hide-sm">Dashboard</span>

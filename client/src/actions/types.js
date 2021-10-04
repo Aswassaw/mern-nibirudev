@@ -21,3 +21,7 @@ export const PROFILES_ERROR = "PROFILES_ERROR";
 export const CLEAR_PROFILE = "CLEAR_PROFILE";
 export const GITHUB_SUCCESS = "GITHUB_SUCCESS";
 export const GITHUB_ERROR = "GITHUB_ERROR";
+
+// Post
+export const POSTS_SUCCESS = "POSTS_SUCCESS"
+export const POSTS_ERROR = "POSTS_ERRORS"
