@@ -2,7 +2,7 @@
 Website untuk menghubungkan para Developer.
 
 ## Teknologi yang digunakan
-# Frontend:
+### Frontend:
 - ReactJS
 - Axios
 - Moment
@@ -12,7 +12,7 @@ Website untuk menghubungkan para Developer.
 - NanoID
 - Prop-Types
 
-# Backend:
+### Backend:
 - ExpressJS
 - Bcrypt
 - Gravatar
