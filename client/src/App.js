@@ -7,7 +7,6 @@ import setAuthToken from "./utils/setAuthToken";
 import { authUser } from "./actions/auth";
 import Navbar from "./components/layout/Navbar";
 import Landing from "./components/layout/Landing";
-import PageNotFound from "./components/404/PageNotFound";
 import Routes from "./components/routing/Routes";
 import { Switch } from "react-router-dom/cjs/react-router-dom.min";
 
