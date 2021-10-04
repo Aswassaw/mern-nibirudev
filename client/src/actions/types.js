@@ -25,3 +25,5 @@ export const GITHUB_ERROR = "GITHUB_ERROR";
 // Post
 export const POSTS_SUCCESS = "POSTS_SUCCESS"
 export const POSTS_ERROR = "POSTS_ERRORS"
+export const UPDATE_LIKES = "UPDATE_LIKES"
+export const UPDATE_UNLIKES = "UPDATE_UNLIKES"

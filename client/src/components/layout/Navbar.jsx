@@ -33,11 +33,11 @@ const Navbar = () => {
           Developers
         </NavLink>
       </li>
-      <li>
+      {/* <li>
         <NavLink exact to="/posts">
           Posts
         </NavLink>
-      </li>
+      </li> */}
       <li>
         <NavLink exact to="/dashboard">
           <i className="fas fa-user"></i>{" "}

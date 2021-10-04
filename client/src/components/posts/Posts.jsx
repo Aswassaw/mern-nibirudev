@@ -7,7 +7,7 @@ import PostForm from './PostForm';
 import PostItem from './PostItem';
 
 const Posts = () => {
-  const { page, alerts } = useSelector((state) => state.alert);
+  const { page } = useSelector((state) => state.alert);
   const { posts, loading } = useSelector(state => state.post)
   const dispatch = useDispatch()
 

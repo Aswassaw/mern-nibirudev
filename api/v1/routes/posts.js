@@ -17,7 +17,7 @@ const {
 } = require("../validations/posts");
 
 const router = express.Router();
- 
+
 // @route  | POST v1/posts
 // @desc   | Create post
 // @access | Private
